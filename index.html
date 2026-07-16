@@ -729,13 +729,22 @@
 
         var rows = [];
         Object.keys(d.newByApp || {}).forEach(function (a) {
-          var bc = d.newByApp[a].byCountry || {};
-          Object.keys(bc).forEach(function (c) { rows.push([NAMES[a], c, bc[c]]); });
+          var v = d.newByApp[a];
+          if (v.byCountryIos || v.byCountryAndroid) {
+            Object.keys(v.byCountryIos || {}).forEach(function (c) { rows.push([NAMES[a], 'iPhone', 'var(--ios)', c, v.byCountryIos[c]]); });
+            Object.keys(v.byCountryAndroid || {}).forEach(function (c) { rows.push([NAMES[a], 'Android', 'var(--android)', c, v.byCountryAndroid[c]]); });
+          } else {
+            Object.keys(v.byCountry || {}).forEach(function (c) { rows.push([NAMES[a], '—', 'transparent', c, v.byCountry[c]]); });
+          }
         });
         if (rows.length) {
-          rows.sort(function (x, y) { return y[2] - x[2]; });
-          var html = '<table style="width:100%"><thead><tr><th>Uygulama</th><th>Ülke</th><th class="num">Yeni indirme</th></tr></thead><tbody>';
-          rows.forEach(function (r) { html += '<tr><td class="appname">' + r[0] + '</td><td>' + r[1] + '</td><td class="num"><b>' + r[2] + '</b></td></tr>'; });
+          rows.sort(function (x, y) { return y[4] - x[4]; });
+          var html = '<table style="width:100%"><thead><tr><th>Uygulama</th><th>Platform</th><th>Ülke</th><th class="num">Yeni indirme</th></tr></thead><tbody>';
+          rows.forEach(function (r) {
+            html += '<tr><td class="appname">' + r[0] + '</td>' +
+              '<td><span class="chip"><span class="swatch" style="background:' + r[2] + '"></span>' + r[1] + '</span></td>' +
+              '<td>' + r[3] + '</td><td class="num"><b>' + r[4] + '</b></td></tr>';
+          });
           html += '</tbody></table>';
           var box = t('newco');
           box.style.textAlign = 'left'; box.style.padding = '8px 12px'; box.style.color = 'inherit';
