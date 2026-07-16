@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-07-16T15:05:48.870Z",
+ "updatedAt": "2026-07-16T15:51:12.890Z",
  "baselineDate": "2026-07-13",
  "totalNew": 18,
  "newUninst": 7,
@@ -10,7 +10,7 @@
   "IR",
   "FR"
  ],
- "proceeds": 0,
+ "proceedsByCur": {},
  "newByApp": {
   "vocal": {
    "ios": 0,
