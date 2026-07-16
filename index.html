@@ -239,7 +239,8 @@
     <p class="eyebrow">Esat Sağlam · Uygulama Portföyü · Haftalık Rapor</p>
     <h1>Mağaza Analitiği Raporu</h1>
     <p class="sub">5 uygulama · <b>App Store</b> (tüm zamanlar) + <b>Google Play</b> (Mart–Temmuz 2026)</p>
-    <p class="sub" style="margin-top:4px">Genel Bakış verileri: 13 Temmuz 2026 · <b>Canlı Takip sekmesi haftada 2 kez otomatik güncellenir</b> (Çarşamba &amp; Pazar)</p>
+    <p class="sub" style="margin-top:4px">Genel Bakış verileri: 13 Temmuz 2026 · <b>Canlı Takip her sabah 07:00'de otomatik güncellenir</b></p>
+    <p class="sub" id="fresh" style="margin-top:8px; display:none"></p>
   </header>
 
   <div class="tabs" role="tablist">
@@ -694,7 +695,24 @@
         t('kpi-uninst').textContent = d.newUninst === null ? '—' : d.newUninst;
         t('kpi-countries').textContent = d.newCountries.length;
         if (d.newCountries.length) t('kpi-countries-note').textContent = d.newCountries.join(', ');
-        if (d.proceeds > 0) { t('kpi-rev').textContent = '$' + d.proceeds; t('kpi-rev').classList.remove('zero'); }
+        var curs = Object.keys(d.proceedsByCur || {});
+        if (curs.length) {
+          t('kpi-rev').textContent = curs.map(function (c) { return d.proceedsByCur[c] + ' ' + c; }).join(' + ');
+          t('kpi-rev').classList.remove('zero');
+          t('kpi-rev').style.fontSize = '22px';
+        }
+
+        // veri tazeliği rozeti
+        var fresh = t('fresh');
+        var saat = Math.round((Date.now() - upd.getTime()) / 3600000);
+        var zaman = upd.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' }) + ' ' +
+          upd.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' });
+        if (saat <= 48) {
+          fresh.innerHTML = '<span style="color:var(--good-text)">●</span> Veri güncel — son çekim: <b>' + zaman + '</b>';
+        } else {
+          fresh.innerHTML = '<span style="color:var(--critical)">●</span> <b>Dikkat:</b> veri ' + Math.floor(saat / 24) + ' gündür güncellenmedi (son: ' + zaman + '). Bilgisayar sabah 07:00 civarı açık mıydı?';
+        }
+        fresh.style.display = 'block';
 
         var hist = t('hist-body');
         (d.history || []).forEach(function (h) {
