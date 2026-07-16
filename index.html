@@ -239,12 +239,12 @@
     <p class="eyebrow">Esat Sağlam · Uygulama Portföyü · Haftalık Rapor</p>
     <h1>Mağaza Analitiği Raporu</h1>
     <p class="sub">5 uygulama · <b>App Store</b> (tüm zamanlar) + <b>Google Play</b> (Mart–Temmuz 2026)</p>
-    <p class="sub" style="margin-top:4px"><b>Hafta 29</b> · Son güncelleme: 13 Temmuz 2026 · Sonraki güncelleme: 20 Temmuz 2026</p>
+    <p class="sub" style="margin-top:4px">Genel Bakış verileri: 13 Temmuz 2026 · <b>Canlı Takip sekmesi haftada 2 kez otomatik güncellenir</b> (Çarşamba &amp; Pazar)</p>
   </header>
 
   <div class="tabs" role="tablist">
     <button class="tab" id="tabbtn-genel" role="tab" aria-selected="true" aria-controls="tab-genel">Genel Bakış</button>
-    <button class="tab" id="tabbtn-takip" role="tab" aria-selected="false" aria-controls="tab-takip">Canlı Takip <span class="badge">13 Tem'den beri: 0</span></button>
+    <button class="tab" id="tabbtn-takip" role="tab" aria-selected="false" aria-controls="tab-takip">Canlı Takip <span class="badge" id="badge-new">13 Tem'den beri: 0</span></button>
   </div>
 
   <div id="tab-genel" role="tabpanel">
@@ -575,22 +575,22 @@
     <div class="kpis">
       <div class="kpi">
         <span class="label">Yeni indirme</span>
-        <span class="value zero">0</span>
-        <span class="note">13 Tem'den beri · ilk veri 20 Tem'de</span>
+        <span class="value zero" id="kpi-new">0</span>
+        <span class="note" id="kpi-new-note">13 Tem'den beri · ilk veri bekleniyor</span>
       </div>
       <div class="kpi">
         <span class="label">Yeni silme</span>
-        <span class="value zero">0</span>
+        <span class="value zero" id="kpi-uninst">0</span>
         <span class="note">yalnız Android izlenebilir</span>
       </div>
       <div class="kpi">
         <span class="label">Yeni ülke</span>
-        <span class="value zero">0</span>
-        <span class="note">ilk kez indirme gelen pazar</span>
+        <span class="value zero" id="kpi-countries">0</span>
+        <span class="note" id="kpi-countries-note">ilk kez indirme gelen pazar</span>
       </div>
       <div class="kpi">
         <span class="label">Yeni gelir</span>
-        <span class="value zero">₺0</span>
+        <span class="value zero" id="kpi-rev">$0</span>
         <span class="note">izlemede: MR deneme aboneliği dönecek mi?</span>
       </div>
     </div>
@@ -603,16 +603,11 @@
           <thead>
             <tr><th>Hafta</th><th class="num">Vocal T.</th><th class="num">Snoutgram</th><th class="num">Match R.</th><th class="num">M. Zihin</th><th class="num">Toplam</th><th>Öne çıkan</th></tr>
           </thead>
-          <tbody>
+          <tbody id="hist-body">
             <tr>
-              <td class="appname">H29 · 13 Tem</td>
+              <td class="appname">13 Tem</td>
               <td class="num zero">—</td><td class="num zero">—</td><td class="num zero">—</td><td class="num zero">—</td><td class="num zero">—</td>
               <td><span style="color:var(--muted)">Başlangıç noktası kuruldu (baz: 115 indirme)</span></td>
-            </tr>
-            <tr>
-              <td class="appname">H30 · 20 Tem</td>
-              <td class="num zero">·</td><td class="num zero">·</td><td class="num zero">·</td><td class="num zero">·</td><td class="num zero">·</td>
-              <td><span style="color:var(--muted)">ilk ölçüm — güncelleme bekleniyor</span></td>
             </tr>
           </tbody>
         </table>
@@ -622,8 +617,8 @@
     <section>
       <h2>Yeni indirmelerin ülke dökümü</h2>
       <p class="desc">13 Temmuz'dan sonra gelen her indirme, geldiği ülke ve platformla burada listelenecek.</p>
-      <div class="card" style="text-align:center; padding:36px 20px; color:var(--muted); font-size:13.5px">
-        Henüz veri yok — ilk ülke dökümü 20 Temmuz güncellemesiyle gelecek.<br>
+      <div class="card" id="newco" style="text-align:center; padding:36px 20px; color:var(--muted); font-size:13.5px">
+        Henüz veri yok — ilk döküm bir sonraki otomatik güncellemeyle gelecek.<br>
         <span style="font-size:12px">Lokalizasyon hamlelerinin (AR/ID/UR, ES/PT…) etkisini tam bu tablodan ölçeceğiz.</span>
       </div>
     </section>
@@ -681,6 +676,54 @@
           });
         });
       });
+
+      // data.json varsa Canlı Takip'i canlı veriyle doldur (yoksa statik kalır)
+      var NAMES = { vocal: 'Vocal Tasbeeh', snout: 'Snoutgram', mr: 'Match Reminder', mz: 'Mutlu Zihin' };
+      fetch('data.json', { cache: 'no-store' }).then(function (r) {
+        if (!r.ok) throw 0;
+        return r.json();
+      }).then(function (d) {
+        var t = function (id) { return document.getElementById(id); };
+        var upd = new Date(d.updatedAt);
+        var tarih = upd.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
+
+        t('badge-new').textContent = '13 Tem\'den beri: ' + d.totalNew;
+        t('kpi-new').textContent = d.totalNew;
+        t('kpi-new').classList.toggle('zero', d.totalNew === 0);
+        t('kpi-new-note').textContent = '13 Tem\'den beri · son kontrol: ' + tarih;
+        t('kpi-uninst').textContent = d.newUninst === null ? '—' : d.newUninst;
+        t('kpi-countries').textContent = d.newCountries.length;
+        if (d.newCountries.length) t('kpi-countries-note').textContent = d.newCountries.join(', ');
+        if (d.proceeds > 0) { t('kpi-rev').textContent = '$' + d.proceeds; t('kpi-rev').classList.remove('zero'); }
+
+        var hist = t('hist-body');
+        (d.history || []).forEach(function (h) {
+          var tr = document.createElement('tr');
+          var toplamNot = h.totalNew > 0 ? 'yeni indirme geldi 🎉' : 'yeni indirme yok';
+          tr.innerHTML = '<td class="appname">' + h.date.slice(8, 10) + '.' + h.date.slice(5, 7) + '</td>' +
+            ['vocal', 'snout', 'mr', 'mz'].map(function (a) {
+              var v = (h.perApp || {})[a] || 0;
+              return '<td class="num' + (v ? '' : ' zero') + '">' + (v || '·') + '</td>';
+            }).join('') +
+            '<td class="num"><b>' + h.totalNew + '</b></td><td><span style="color:var(--muted)">' + toplamNot + '</span></td>';
+          hist.appendChild(tr);
+        });
+
+        var rows = [];
+        Object.keys(d.newByApp || {}).forEach(function (a) {
+          var bc = d.newByApp[a].byCountry || {};
+          Object.keys(bc).forEach(function (c) { rows.push([NAMES[a], c, bc[c]]); });
+        });
+        if (rows.length) {
+          rows.sort(function (x, y) { return y[2] - x[2]; });
+          var html = '<table style="width:100%"><thead><tr><th>Uygulama</th><th>Ülke</th><th class="num">Yeni indirme</th></tr></thead><tbody>';
+          rows.forEach(function (r) { html += '<tr><td class="appname">' + r[0] + '</td><td>' + r[1] + '</td><td class="num"><b>' + r[2] + '</b></td></tr>'; });
+          html += '</tbody></table>';
+          var box = t('newco');
+          box.style.textAlign = 'left'; box.style.padding = '8px 12px'; box.style.color = 'inherit';
+          box.innerHTML = html;
+        }
+      }).catch(function () { /* data.json yok — statik değerler geçerli */ });
     })();
   </script>
 
