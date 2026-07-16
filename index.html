@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Uygulama Portföyü — Mağaza Analitiği</title></head>
+<body>
+<style>
+  :root {
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --baseline: #c3c2b7;
+    --border: rgba(11,11,11,0.10);
+    --ios: #2a78d6;
+    --android: #1baf7a;
+    --good: #0ca30c;
+    --good-text: #006300;
+    --critical: #d03b3b;
+    --warning: #fab219;
+    --wash: rgba(11,11,11,0.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #0d0d0d;
+      --surface: #1a1a19;
+      --ink: #ffffff;
+      --ink-2: #c3c2b7;
+      --muted: #898781;
+      --grid: #2c2c2a;
+      --baseline: #383835;
+      --border: rgba(255,255,255,0.10);
+      --ios: #3987e5;
+      --android: #199e70;
+      --good-text: #0ca30c;
+      --critical: #d03b3b;
+      --wash: rgba(255,255,255,0.06);
+    }
+  }
+  :root[data-theme="light"] {
+    --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e;
+    --muted: #898781; --grid: #e1e0d9; --baseline: #c3c2b7; --border: rgba(11,11,11,0.10);
+    --ios: #2a78d6; --android: #1baf7a; --good-text: #006300; --critical: #d03b3b;
+    --wash: rgba(11,11,11,0.04);
+  }
+  :root[data-theme="dark"] {
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
+    --muted: #898781; --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
+    --ios: #3987e5; --android: #199e70; --good-text: #0ca30c; --critical: #d03b3b;
+    --wash: rgba(255,255,255,0.06);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 40px 20px 72px; }
+
+  /* ---------- header ---------- */
+  .eyebrow {
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); font-weight: 600; margin: 0 0 10px;
+  }
+  h1 {
+    font-size: clamp(26px, 4.5vw, 36px); font-weight: 700; letter-spacing: -0.02em;
+    margin: 0 0 6px; text-wrap: balance;
+  }
+  .sub { color: var(--ink-2); font-size: 14.5px; margin: 0; }
+  .sub b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- sections ---------- */
+  section { margin-top: 44px; }
+  h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 4px; }
+  .desc { color: var(--ink-2); font-size: 13.5px; margin: 0 0 16px; max-width: 68ch; }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  /* ---------- KPI tiles ---------- */
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 28px; }
+  .kpi {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px 18px; display: flex; flex-direction: column; gap: 2px;
+  }
+  .kpi .label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  .kpi .value { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
+  .kpi .note { font-size: 12.5px; color: var(--ink-2); }
+  .kpi .note.warn { color: var(--critical); font-weight: 500; }
+
+  /* ---------- legend ---------- */
+  .legend { display: flex; gap: 18px; align-items: center; margin: 0 0 14px; font-size: 13px; color: var(--ink-2); }
+  .chip { display: inline-flex; align-items: center; gap: 7px; }
+  .swatch { width: 11px; height: 11px; border-radius: 3px; flex: 0 0 auto; }
+
+  /* ---------- app bars (stacked iOS+Android) ---------- */
+  .bars { display: flex; flex-direction: column; gap: 14px; }
+  .barrow { display: grid; grid-template-columns: 128px 1fr 52px; gap: 12px; align-items: center; }
+  .barrow .name { font-size: 13.5px; font-weight: 600; text-align: right; color: var(--ink); }
+  .barrow .name small { display: block; font-weight: 400; font-size: 11.5px; color: var(--muted); }
+  .track { display: flex; gap: 2px; height: 22px; align-items: stretch; border-radius: 0 4px 4px 0; }
+  .seg { border-radius: 0; transition: opacity .15s ease; min-width: 3px; }
+  .seg:last-child { border-radius: 0 4px 4px 0; }
+  .seg.ios { background: var(--ios); }
+  .seg.android { background: var(--android); }
+  .barrow:hover .seg { opacity: 0.82; }
+  .total { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .split { font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  /* ---------- country small multiples ---------- */
+  .countries { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .cocard { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+  .cocard h3 { margin: 0 0 2px; font-size: 14px; font-weight: 700; }
+  .cocard .cosub { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  .corow { display: grid; grid-template-columns: 92px 1fr 30px; gap: 8px; align-items: center; padding: 3.5px 0; }
+  .corow .cname { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cobar-track { height: 12px; display: flex; align-items: center; }
+  .cobar { height: 12px; background: var(--ios); border-radius: 0 3px 3px 0; min-width: 3px; }
+  .cocard[data-p="android"] .cobar { background: var(--android); }
+  .cocard[data-p="mix"] .cobar { background: var(--ios); }
+  .coval { font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; text-align: right; color: var(--ink); }
+  .comore { font-size: 11.5px; color: var(--muted); margin-top: 8px; }
+
+  /* ---------- conversion spotlight ---------- */
+  .spot { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .spotcell { padding: 18px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); }
+  .spotcell .plat { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 7px; }
+  .spotcell .big { font-size: 40px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin: 6px 0 2px; }
+  .spotcell .big.bad { color: var(--critical); }
+  .spotcell .big.ok { color: var(--good-text); }
+  .spotcell .detail { font-size: 12.5px; color: var(--ink-2); }
+  .verdict { margin-top: 12px; font-size: 13.5px; color: var(--ink-2); max-width: 70ch; }
+  .verdict b { color: var(--ink); }
+
+  .convbars { margin-top: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .convrow { display: grid; grid-template-columns: 128px 1fr 96px; gap: 12px; align-items: center; }
+  .convrow .name { font-size: 13px; font-weight: 600; text-align: right; }
+  .convtrack { height: 14px; background: var(--wash); border-radius: 0 3px 3px 0; position: relative; }
+  .convfill { height: 100%; background: var(--android); border-radius: 0 3px 3px 0; min-width: 3px; }
+  .convpct { font-size: 12.5px; font-variant-numeric: tabular-nums; color: var(--ink-2); white-space: nowrap; }
+  .convpct b { color: var(--ink); }
+
+  /* ---------- churn table ---------- */
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; }
+  th { text-align: left; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 8px 12px; border-bottom: 1px solid var(--baseline); white-space: nowrap; }
+  th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--grid); }
+  tr:last-child td { border-bottom: none; }
+  td.appname { font-weight: 600; white-space: nowrap; }
+  .neg { color: var(--critical); font-weight: 600; }
+  .pos { color: var(--good-text); font-weight: 600; }
+  .flag-note { font-size: 11.5px; color: var(--muted); display: block; margin-top: 1px; }
+
+  /* ---------- actions ---------- */
+  .actions { display: flex; flex-direction: column; gap: 10px; }
+  .action { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .prio { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 99px; white-space: nowrap; margin-top: 2px; }
+  .prio.p1 { background: var(--critical); color: #fff; }
+  .prio.p2 { background: var(--wash); color: var(--ink-2); border: 1px solid var(--border); }
+  .action h3 { margin: 0 0 2px; font-size: 14px; font-weight: 700; }
+  .action p { margin: 0; font-size: 13px; color: var(--ink-2); }
+
+  .foot { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--grid); font-size: 12px; color: var(--muted); max-width: 76ch; }
+  .foot p { margin: 0 0 6px; }
+
+  /* ---------- tabs ---------- */
+  .tabs { display: flex; gap: 4px; margin-top: 26px; border-bottom: 1px solid var(--baseline); }
+  .tab {
+    appearance: none; background: none; border: none; cursor: pointer;
+    font: inherit; font-size: 14px; font-weight: 600; color: var(--muted);
+    padding: 10px 16px 12px; border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .tab:hover { color: var(--ink-2); }
+  .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ios); }
+  .tab:focus-visible { outline: 2px solid var(--ios); outline-offset: -2px; border-radius: 4px; }
+  .tab .badge {
+    display: inline-block; margin-left: 6px; font-size: 11px; font-weight: 700;
+    padding: 1px 7px; border-radius: 99px; background: var(--wash); color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  [hidden] { display: none !important; }
+
+  .notice {
+    background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--ios);
+    border-radius: 8px; padding: 14px 16px; font-size: 13.5px; color: var(--ink-2); margin-top: 28px;
+  }
+  .notice b { color: var(--ink); }
+  .zero { color: var(--muted); }
+
+  /* ---------- basit özet & katlanır detay ---------- */
+  .plain {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 20px 22px; margin-top: 28px;
+  }
+  .plain h2 { margin: 0 0 12px; font-size: 15px; }
+  .plain ul { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .plain li { font-size: 15px; line-height: 1.5; padding-left: 26px; position: relative; }
+  .plain li::before { content: attr(data-ico); position: absolute; left: 0; }
+  .plain li b { font-weight: 700; }
+
+  details.more { margin-top: 12px; }
+  details.more > summary {
+    cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: var(--ios);
+    padding: 6px 0; user-select: none;
+  }
+  details.more > summary::-webkit-details-marker { display: none; }
+  details.more > summary::after { content: "▾"; font-size: 11px; transition: transform .15s; }
+  details.more[open] > summary::after { transform: rotate(180deg); }
+  details.more > summary:hover { text-decoration: underline; }
+  details.more > .inner { margin-top: 10px; }
+
+  @media (max-width: 620px) {
+    .barrow { grid-template-columns: 96px 1fr 46px; }
+    .convrow { grid-template-columns: 96px 1fr 84px; }
+    .spot { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .seg, .barrow:hover .seg { transition: none; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Esat Sağlam · Uygulama Portföyü · Haftalık Rapor</p>
+    <h1>Mağaza Analitiği Raporu</h1>
+    <p class="sub">5 uygulama · <b>App Store</b> (tüm zamanlar) + <b>Google Play</b> (Mart–Temmuz 2026)</p>
+    <p class="sub" style="margin-top:4px"><b>Hafta 29</b> · Son güncelleme: 13 Temmuz 2026 · Sonraki güncelleme: 20 Temmuz 2026</p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab" id="tabbtn-genel" role="tab" aria-selected="true" aria-controls="tab-genel">Genel Bakış</button>
+    <button class="tab" id="tabbtn-takip" role="tab" aria-selected="false" aria-controls="tab-takip">Canlı Takip <span class="badge">13 Tem'den beri: 0</span></button>
+  </div>
+
+  <div id="tab-genel" role="tabpanel">
+
+  <div class="plain">
+    <h2>Kısaca durum ne?</h2>
+    <ul>
+      <li data-ico="📱">Uygulamaların bugüne kadar <b>115 kez indirildi</b> — dünyanın <b>30 ülkesinden</b>, hiç reklam vermeden.</li>
+      <li data-ico="🏆">Açık ara en başarılın <b>Vocal Tasbeeh</b> (68 indirme). İnsanlar onu kendiliğinden buluyor — büyütmen gereken uygulama bu.</li>
+      <li data-ico="💰">Henüz <b>para kazanmıyorsun</b>. Tek umut: Match Reminder'da 1 kişi deneme aboneliği başlattı — ücretliye dönerse ilk gelirin olacak.</li>
+      <li data-ico="⚠️">İki sorun var: <b>iPhone'da Match Reminder'ın sayfası tıklanmıyor</b> (görselleri eksik olabilir) ve <b>Android'de indirenlerin çoğu uygulamayı siliyor</b>.</li>
+      <li data-ico="🎯">En akıllı hamle: <b>Vocal Tasbeeh'i Arapça'ya çevirmek</b> — indirmelerin çoğu zaten Müslüman ülkelerden geliyor.</li>
+    </ul>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi">
+      <span class="label">Toplam indirme</span>
+      <span class="value">115</span>
+      <span class="note">51 iOS · 64 Android</span>
+    </div>
+    <div class="kpi">
+      <span class="label">Ulaşılan ülke</span>
+      <span class="value">30</span>
+      <span class="note">5 kıtada organik erişim</span>
+    </div>
+    <div class="kpi">
+      <span class="label">Lider uygulama</span>
+      <span class="value">Vocal Tasbeeh</span>
+      <span class="note">68 indirme — portföyün %59'u</span>
+    </div>
+    <div class="kpi">
+      <span class="label">Gelir</span>
+      <span class="value">1 abonelik</span>
+      <span class="note warn">deneme süresinde — henüz ödeme yok</span>
+    </div>
+  </div>
+
+  <!-- ============ per-app platform bars ============ -->
+  <section>
+    <h2>Uygulama başına indirme</h2>
+    <p class="desc">İki mağazanın toplamı. Portföy iki uygulamada yoğunlaşıyor: Vocal Tasbeeh ve Snoutgram indirmelerin %85'ini taşıyor.</p>
+    <div class="card">
+      <div class="legend">
+        <span class="chip"><span class="swatch" style="background:var(--ios)"></span>App Store</span>
+        <span class="chip"><span class="swatch" style="background:var(--android)"></span>Google Play</span>
+      </div>
+      <div class="bars">
+        <!-- max = 69 -->
+        <div class="barrow" title="Vocal Tasbeeh — iOS 25, Android 43">
+          <span class="name">Vocal Tasbeeh<small>Sesli Tespih</small></span>
+          <div class="track">
+            <div class="seg ios" style="width:36.8%"></div>
+            <div class="seg android" style="width:63.2%"></div>
+          </div>
+          <span class="total">68<div class="split">25 + 43</div></span>
+        </div>
+        <div class="barrow" title="Snoutgram — iOS 12, Android 15">
+          <span class="name">Snoutgram</span>
+          <div class="track" style="width:39.7%">
+            <div class="seg ios" style="width:44.4%"></div>
+            <div class="seg android" style="width:55.6%"></div>
+          </div>
+          <span class="total">27<div class="split">12 + 15</div></span>
+        </div>
+        <div class="barrow" title="Match Reminder — iOS 7, Android 4">
+          <span class="name">Match Reminder<small>Maç Hatırlatıcı</small></span>
+          <div class="track" style="width:16.2%">
+            <div class="seg ios" style="width:63.6%"></div>
+            <div class="seg android" style="width:36.4%"></div>
+          </div>
+          <span class="total">11<div class="split">7 + 4</div></span>
+        </div>
+        <div class="barrow" title="Mutlu Zihin / Peacefy — iOS 7, Android 2">
+          <span class="name">Mutlu Zihin<small>Peacefy</small></span>
+          <div class="track" style="width:13.2%">
+            <div class="seg ios" style="width:77.8%"></div>
+            <div class="seg android" style="width:22.2%"></div>
+          </div>
+          <span class="total">9<div class="split">7 + 2</div></span>
+        </div>
+        <div class="barrow" title="FamilyFlow — henüz indirme yok">
+          <span class="name">FamilyFlow</span>
+          <div class="track"><span style="font-size:12px;color:var(--muted);align-self:center">Play'de yayında değil · App Store'da 0</span></div>
+          <span class="total">0</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ country breakdown ============ -->
+  <section>
+    <h2>Hangi ülkelerden indiriyorlar?</h2>
+    <p class="desc">Her uygulamada Türkiye ilk sırada. Vocal Tasbeeh ise tek başına 21 ülkeye ulaştı — Suudi Arabistan'dan Brezilya'ya.</p>
+    <details class="more">
+    <summary>Ülke ülke detayları göster</summary>
+    <div class="inner">
+    <div class="countries">
+
+      <div class="cocard" data-p="mix">
+        <h3>Vocal Tasbeeh</h3>
+        <p class="cosub">68 indirme · 21 ülke</p>
+        <!-- max 39 -->
+        <div class="corow"><span class="cname">🇹🇷 Türkiye</span><div class="cobar-track"><div class="cobar" style="width:100%"></div></div><span class="coval">39</span></div>
+        <div class="corow"><span class="cname">🇦🇿 Azerbaycan</span><div class="cobar-track"><div class="cobar" style="width:10.3%"></div></div><span class="coval">4</span></div>
+        <div class="corow"><span class="cname">🇫🇷 Fransa</span><div class="cobar-track"><div class="cobar" style="width:5.1%"></div></div><span class="coval">2</span></div>
+        <div class="corow"><span class="cname">🇺🇸 ABD</span><div class="cobar-track"><div class="cobar" style="width:5.1%"></div></div><span class="coval">2</span></div>
+        <div class="corow"><span class="cname">🇬🇧 İngiltere</span><div class="cobar-track"><div class="cobar" style="width:5.1%"></div></div><span class="coval">2</span></div>
+        <div class="corow"><span class="cname">🇧🇷 Brezilya</span><div class="cobar-track"><div class="cobar" style="width:5.1%"></div></div><span class="coval">2</span></div>
+        <p class="comore">+ RU, TM (2'şer) · DE, NL, CA, NO, SA, JO, MY, NG, TZ, GH, AU, BE, BA (1'er)</p>
+      </div>
+
+      <div class="cocard" data-p="mix">
+        <h3>Snoutgram</h3>
+        <p class="cosub">27 indirme · 11 ülke</p>
+        <!-- max 9 -->
+        <div class="corow"><span class="cname">🇹🇷 Türkiye</span><div class="cobar-track"><div class="cobar" style="width:100%"></div></div><span class="coval">9</span></div>
+        <div class="corow"><span class="cname">🇺🇸 ABD</span><div class="cobar-track"><div class="cobar" style="width:44.4%"></div></div><span class="coval">4</span></div>
+        <div class="corow"><span class="cname">🇳🇬 Nijerya</span><div class="cobar-track"><div class="cobar" style="width:33.3%"></div></div><span class="coval">3</span></div>
+        <div class="corow"><span class="cname">🇬🇧 İngiltere</span><div class="cobar-track"><div class="cobar" style="width:22.2%"></div></div><span class="coval">2</span></div>
+        <div class="corow"><span class="cname">🇦🇺 Avustralya</span><div class="cobar-track"><div class="cobar" style="width:22.2%"></div></div><span class="coval">2</span></div>
+        <div class="corow"><span class="cname">🇮🇩 Endonezya</span><div class="cobar-track"><div class="cobar" style="width:22.2%"></div></div><span class="coval">2</span></div>
+        <p class="comore">+ FR, UA, CN, ES, RU (1'er)</p>
+      </div>
+
+      <div class="cocard" data-p="mix">
+        <h3>Match Reminder</h3>
+        <p class="cosub">11 indirme · 8 ülke</p>
+        <!-- max 4 -->
+        <div class="corow"><span class="cname">🇹🇷 Türkiye</span><div class="cobar-track"><div class="cobar" style="width:100%"></div></div><span class="coval">4</span></div>
+        <div class="corow"><span class="cname">🇺🇸 ABD</span><div class="cobar-track"><div class="cobar" style="width:50%"></div></div><span class="coval">2</span></div>
+        <div class="corow"><span class="cname">🇬🇷 Yunanistan</span><div class="cobar-track"><div class="cobar" style="width:25%"></div></div><span class="coval">1</span></div>
+        <div class="corow"><span class="cname">🇦🇪 BAE</span><div class="cobar-track"><div class="cobar" style="width:25%"></div></div><span class="coval">1</span></div>
+        <div class="corow"><span class="cname">🇦🇿 Azerbaycan</span><div class="cobar-track"><div class="cobar" style="width:25%"></div></div><span class="coval">1</span></div>
+        <p class="comore">+ NG, BJ (1'er) · tek abonelik TR'den 💳</p>
+      </div>
+
+      <div class="cocard" data-p="mix">
+        <h3>Mutlu Zihin</h3>
+        <p class="cosub">9 indirme · 5 ülke</p>
+        <!-- max 5 -->
+        <div class="corow"><span class="cname">🇹🇷 Türkiye</span><div class="cobar-track"><div class="cobar" style="width:100%"></div></div><span class="coval">5</span></div>
+        <div class="corow"><span class="cname">🇯🇵 Japonya</span><div class="cobar-track"><div class="cobar" style="width:20%"></div></div><span class="coval">1</span></div>
+        <div class="corow"><span class="cname">🇺🇦 Ukrayna</span><div class="cobar-track"><div class="cobar" style="width:20%"></div></div><span class="coval">1</span></div>
+        <div class="corow"><span class="cname">🇺🇸 ABD</span><div class="cobar-track"><div class="cobar" style="width:20%"></div></div><span class="coval">1</span></div>
+        <div class="corow"><span class="cname">🇻🇪 Venezuela</span><div class="cobar-track"><div class="cobar" style="width:20%"></div></div><span class="coval">1</span></div>
+        <p class="comore">iOS'ta EN/AR/TR mevcut; Play sayfası 5 ayda yalnız 19 ziyaret aldı</p>
+      </div>
+
+    </div>
+    </div>
+    </details>
+  </section>
+
+  <!-- ============ country scorecard ============ -->
+  <section>
+    <h2>Hangi ülke iyi, hangisi değil?</h2>
+    <p class="desc"><b>Kısaca:</b> Türkiye en çok indiren ülke ama silmeler de orada. ABD ve İngiltere az indiriyor ama hiç silmiyor — en değerli kullanıcılar onlar. Arap ve Müslüman ülkeler ise büyüme fırsatın.</p>
+    <details class="more">
+    <summary>Ülke karnesinin tamamını göster</summary>
+    <div class="inner">
+    <div class="card tablewrap">
+      <table>
+        <thead>
+          <tr><th>Ülke</th><th class="num">İndirme</th><th class="num">Silme (Android)</th><th>Karne</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="appname">🇹🇷 Türkiye</td>
+            <td class="num">57</td><td class="num">30</td>
+            <td><span class="neg">Hacimli ama sızdırıyor</span><span class="flag-note">indirmelerin %44'ü — ama Android'de gelen 10 kişiden 7'si siliyor. Tutundurma önceliği burada.</span></td>
+          </tr>
+          <tr>
+            <td class="appname">🇺🇸 ABD</td>
+            <td class="num">9</td><td class="num">2</td>
+            <td><span class="pos">Küçük ama değerli</span><span class="flag-note">çoğu iOS'tan; Match Reminder'ın tek yurtdışı işlem sinyali de buradan.</span></td>
+          </tr>
+          <tr>
+            <td class="appname">🇦🇿 Azerbaycan</td>
+            <td class="num">5</td><td class="num">6</td>
+            <td><span class="neg">İlgili ama tutmuyor</span><span class="flag-note">Vocal Tasbeeh'e geliyorlar, kalmıyorlar — TR ile aynı tutundurma sorunu.</span></td>
+          </tr>
+          <tr>
+            <td class="appname">🇳🇬 Nijerya</td>
+            <td class="num">5</td><td class="num">4</td>
+            <td><span style="color:var(--muted);font-weight:600">İzlemede</span><span class="flag-note">3 farklı uygulamaya dağılmış merak trafiği.</span></td>
+          </tr>
+          <tr>
+            <td class="appname">🇬🇧 İngiltere</td>
+            <td class="num">4</td><td class="num">0</td>
+            <td><span class="pos">Sessiz ve sadık</span><span class="flag-note">tamamı iOS; hiç silme sinyali yok.</span></td>
+          </tr>
+          <tr>
+            <td class="appname">🇫🇷 🇦🇺 🇷🇺 🇧🇷</td>
+            <td class="num">3'er</td><td class="num">≤2</td>
+            <td><span style="color:var(--muted);font-weight:600">Uzun kuyruk</span><span class="flag-note">+ 14 ülke daha 1–2 indirmeyle: SA, JO, MY, ID, TM, UA, DE, NL, CA, NO, GH, TZ, CN, ES…</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    </details>
+  </section>
+
+  <!-- ============ conversion ============ -->
+  <section>
+    <h2>En çarpıcı bulgu: aynı uygulama, iki farklı kader</h2>
+    <p class="desc">Match Reminder'ın sayfasını <b>Android'de gören her 3 kişiden 1'i indiriyor</b>. iPhone'da ise binlerce kişi görüyor ama neredeyse kimse tıklamıyor. Sorun uygulamada değil, iPhone mağaza sayfasında (muhtemelen eksik görseller).</p>
+    <div class="spot">
+      <div class="spotcell">
+        <span class="plat"><span class="swatch" style="background:var(--android)"></span>Google Play · Match Reminder</span>
+        <div class="big ok">%35.9</div>
+        <span class="detail">39 sayfa ziyaretçisinden 14'ü indirdi — sayfayı gören her 3 kişiden 1'i</span>
+      </div>
+      <div class="spotcell">
+        <span class="plat"><span class="swatch" style="background:var(--ios)"></span>App Store · Match Reminder</span>
+        <div class="big bad">%0.4</div>
+        <span class="detail">1.440 gösterimden yalnız 19 sayfa görüntüleme, 6 indirme</span>
+      </div>
+    </div>
+    <details class="more">
+    <summary>Diğer uygulamaların oranlarını göster</summary>
+    <div class="inner">
+    <div class="convbars" style="margin-top:8px">
+      <div class="legend" style="margin:0 0 2px"><span class="chip"><span class="swatch" style="background:var(--android)"></span>Google Play: sayfayı görenlerin yüzde kaçı indiriyor?</span></div>
+      <!-- scale: 40% -->
+      <div class="convrow"><span class="name">Match Reminder</span><div class="convtrack"><div class="convfill" style="width:89.8%"></div></div><span class="convpct"><b>%35.9</b> · 39 kişi gördü</span></div>
+      <div class="convrow"><span class="name">Vocal Tasbeeh</span><div class="convtrack"><div class="convfill" style="width:73.8%"></div></div><span class="convpct"><b>%29.5</b> · 122 kişi gördü</span></div>
+      <div class="convrow"><span class="name">Snoutgram</span><div class="convtrack"><div class="convfill" style="width:27.3%"></div></div><span class="convpct"><b>%10.9</b> · 119 kişi gördü</span></div>
+      <div class="convrow"><span class="name">Mutlu Zihin</span><div class="convtrack"><div class="convfill" style="width:26.3%"></div></div><span class="convpct"><b>%10.5</b> · 19 kişi gördü</span></div>
+    </div>
+    </div>
+    </details>
+  </section>
+
+  <!-- ============ churn ============ -->
+  <section>
+    <h2>İndirenler kalıyor mu?</h2>
+    <p class="desc"><b>Kısaca:</b> Hayır, çoğu kalmıyor. Android'de 64 kişi indirdi, 49'u sildi. En büyük kayıp Vocal Tasbeeh'te: Türkiye'de 33 indirenin 22'si silmiş. Uygulamanın ilk açılışta kullanıcıyı ikna etmesi gerekiyor. (iPhone silmelerini Apple paylaşmıyor.)</p>
+    <details class="more">
+    <summary>Uygulama uygulama silme tablosunu göster</summary>
+    <div class="inner">
+    <div class="card tablewrap">
+      <table>
+        <thead>
+          <tr><th>Uygulama</th><th class="num">Yükleme</th><th class="num">Silme</th><th class="num">Net</th><th>Not</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="appname">Vocal Tasbeeh</td>
+            <td class="num">43</td><td class="num">33</td><td class="num neg">+10</td>
+            <td>TR: 33 yükleme / 22 silme (%67 kayıp)<span class="flag-note">tutundurma sorunu — ilk açılış deneyimine bak</span></td>
+          </tr>
+          <tr>
+            <td class="appname">Snoutgram</td>
+            <td class="num">15</td><td class="num">13</td><td class="num neg">+2</td>
+            <td>TR: 5/6 · sosyal uygulamada içerik yoksa kullanıcı durmaz<span class="flag-note">ağ etkisi kurulana dek normal</span></td>
+          </tr>
+          <tr>
+            <td class="appname">Match Reminder</td>
+            <td class="num">4</td><td class="num">2</td><td class="num pos">+2</td>
+            <td>küçük ama sağlıklı denge<span class="flag-note">sorun tutundurma değil, keşfedilme: 5 ayda 39 ziyaret</span></td>
+          </tr>
+          <tr>
+            <td class="appname">Mutlu Zihin</td>
+            <td class="num">2</td><td class="num">1</td><td class="num pos">+1</td>
+            <td>veri anlamlı sonuç için çok az<span class="flag-note">asıl sorun trafik yokluğu: 5 ayda 19 ziyaret</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    </div>
+    </details>
+  </section>
+
+  <!-- ============ actions ============ -->
+  <section>
+    <h2>Aksiyon planı: dil dil lokalizasyon yol haritası</h2>
+    <p class="desc">1 numaralı iş: ekran görüntüleri, uygulama adı ve açıklamaların dile göre lokalizasyonu. Uygulama başına başlangıç dilleri, indirme verisindeki organik talebe göre sıralandı.</p>
+    <div class="actions">
+      <div class="action">
+        <span class="prio p1">1 · Yüksek</span>
+        <div>
+          <h3>Vocal Tasbeeh → 🇸🇦 Arapça, 🇮🇩 Endonezce, 🇵🇰 Urduca</h3>
+          <p>Önce <b>Arapça</b> (SA + JO'dan indirme var; zikir/tesbih aramalarının ana dili, körfez ülkelerinin tamamını açar). Sonra <b>Endonezce</b> (dünyanın en büyük Müslüman nüfusu, MY Malaycasıyla %90 ortak) ve <b>Urduca</b> (Pakistan + Hindistan Müslümanları). İsim önerisi: arapçada "مسبحة صوتية - عداد الذكر".</p>
+        </div>
+      </div>
+      <div class="action">
+        <span class="prio p1">2 · Yüksek</span>
+        <div>
+          <h3>Match Reminder → önce iOS vitrini onar, sonra 🇪🇸 İspanyolca, 🇧🇷 Portekizce</h3>
+          <p><b>Acil:</b> ABD App Store vitrininde ekran görüntüsü görünmüyor (API 0 gösteriyor) — App Store Connect'ten kontrol et, %0.4 dönüşümün ana şüphelisi bu. Sonra futbolun en büyük pazarları: <b>İspanyolca</b> (ES + tüm Latin Amerika) ve <b>Brezilya Portekizcesi</b>. Elindeki es1.jpeg ekran görüntüleri hazır zaten. Arapça (AE'den indirme + körfez futbol izleyicisi) üçüncü sırada.</p>
+        </div>
+      </div>
+      <div class="action">
+        <span class="prio p1">3 · Yüksek</span>
+        <div>
+          <h3>Mutlu Zihin → App Store'daki 🇬🇧 EN / 🇸🇦 AR / 🇹🇷 TR'yi Play'e taşı</h3>
+          <p>iOS'ta üç dil hazır ama Play sayfası tek dilde ve 5 ayda 19 ziyaret almış. Mevcut çevirileri Play Console'a girmek yarım günlük iş, sıfır çeviri maliyeti. Sonraki dalga: 🇪🇸 İspanyolca + 🇩🇪 Almanca (meditasyon pazarının en çok ödeme yapan iki kitlesi).</p>
+        </div>
+      </div>
+      <div class="action">
+        <span class="prio p2">4 · Orta</span>
+        <div>
+          <h3>Snoutgram → 🇪🇸 İspanyolca, 🇮🇩 Endonezce</h3>
+          <p>Trafik EN ülkelerinden (US, GB, AU, NG) geliyor, İngilizce ana vitrin zaten iş görüyor. ID'den 2 organik indirme sinyal veriyor; evcil hayvan sosyal ağları Latin Amerika'da güçlü. Öncelik diğer üç uygulamadan düşük — sosyal uygulamada dilden önce içerik ağı gelir.</p>
+        </div>
+      </div>
+      <div class="action">
+        <span class="prio p2">5 · Orta</span>
+        <div>
+          <h3>Vocal Tasbeeh tutundurma analizi</h3>
+          <p>TR'de 33 yükleme / 22 silme. İlk 5 dakikada değer gösterilmiyor olabilir: onboarding akışını, bildirim izni zamanlamasını ve ilk zikir deneyimini gözden geçir.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </div><!-- /tab-genel -->
+
+  <!-- ================= CANLI TAKİP ================= -->
+  <div id="tab-takip" role="tabpanel" hidden>
+
+    <div class="notice">
+      <b>Takip başlangıcı: 13 Temmuz 2026, saat 15:00 (TSİ).</b> Bu sekme yalnız bu andan <b>sonra</b> gelen indirmeleri sayar — geçmiş toplamlar "Genel Bakış"ta. Her haftalık güncellemede yeni indirmeler ülke, platform ve silme detayıyla buraya işlenir.
+    </div>
+
+    <div class="kpis">
+      <div class="kpi">
+        <span class="label">Yeni indirme</span>
+        <span class="value zero">0</span>
+        <span class="note">13 Tem'den beri · ilk veri 20 Tem'de</span>
+      </div>
+      <div class="kpi">
+        <span class="label">Yeni silme</span>
+        <span class="value zero">0</span>
+        <span class="note">yalnız Android izlenebilir</span>
+      </div>
+      <div class="kpi">
+        <span class="label">Yeni ülke</span>
+        <span class="value zero">0</span>
+        <span class="note">ilk kez indirme gelen pazar</span>
+      </div>
+      <div class="kpi">
+        <span class="label">Yeni gelir</span>
+        <span class="value zero">₺0</span>
+        <span class="note">izlemede: MR deneme aboneliği dönecek mi?</span>
+      </div>
+    </div>
+
+    <section>
+      <h2>Haftalık akış</h2>
+      <p class="desc">Her satır bir haftalık güncelleme. Uygulama başına yeni indirme sayısı ve dikkat çeken olaylar.</p>
+      <div class="card tablewrap">
+        <table>
+          <thead>
+            <tr><th>Hafta</th><th class="num">Vocal T.</th><th class="num">Snoutgram</th><th class="num">Match R.</th><th class="num">M. Zihin</th><th class="num">Toplam</th><th>Öne çıkan</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="appname">H29 · 13 Tem</td>
+              <td class="num zero">—</td><td class="num zero">—</td><td class="num zero">—</td><td class="num zero">—</td><td class="num zero">—</td>
+              <td><span style="color:var(--muted)">Başlangıç noktası kuruldu (baz: 115 indirme)</span></td>
+            </tr>
+            <tr>
+              <td class="appname">H30 · 20 Tem</td>
+              <td class="num zero">·</td><td class="num zero">·</td><td class="num zero">·</td><td class="num zero">·</td><td class="num zero">·</td>
+              <td><span style="color:var(--muted)">ilk ölçüm — güncelleme bekleniyor</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>Yeni indirmelerin ülke dökümü</h2>
+      <p class="desc">13 Temmuz'dan sonra gelen her indirme, geldiği ülke ve platformla burada listelenecek.</p>
+      <div class="card" style="text-align:center; padding:36px 20px; color:var(--muted); font-size:13.5px">
+        Henüz veri yok — ilk ülke dökümü 20 Temmuz güncellemesiyle gelecek.<br>
+        <span style="font-size:12px">Lokalizasyon hamlelerinin (AR/ID/UR, ES/PT…) etkisini tam bu tablodan ölçeceğiz.</span>
+      </div>
+    </section>
+
+    <section>
+      <h2>Başlangıç noktası (baz değerler)</h2>
+      <p class="desc">13 Temmuz 2026 itibarıyla dondurulmuş toplamlar. Sonraki her rakam bu tabloyla karşılaştırılarak "yeni" sayılır.</p>
+      <div class="card tablewrap">
+        <table>
+          <thead>
+            <tr><th>Uygulama</th><th class="num">iOS</th><th class="num">Android</th><th class="num">Toplam</th><th class="num">Android silme</th><th class="num">Ülke</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="appname">Vocal Tasbeeh</td><td class="num">25</td><td class="num">43</td><td class="num"><b>68</b></td><td class="num">33</td><td class="num">21</td></tr>
+            <tr><td class="appname">Snoutgram</td><td class="num">12</td><td class="num">15</td><td class="num"><b>27</b></td><td class="num">13</td><td class="num">11</td></tr>
+            <tr><td class="appname">Match Reminder</td><td class="num">7</td><td class="num">4</td><td class="num"><b>11</b></td><td class="num">2</td><td class="num">8</td></tr>
+            <tr><td class="appname">Mutlu Zihin</td><td class="num">7</td><td class="num">2</td><td class="num"><b>9</b></td><td class="num">1</td><td class="num">5</td></tr>
+            <tr><td class="appname">FamilyFlow</td><td class="num">0</td><td class="num">—</td><td class="num"><b>0</b></td><td class="num">—</td><td class="num">0</td></tr>
+            <tr><td class="appname" style="border-top:2px solid var(--baseline)">Toplam</td><td class="num" style="border-top:2px solid var(--baseline)">51</td><td class="num" style="border-top:2px solid var(--baseline)">64</td><td class="num" style="border-top:2px solid var(--baseline)"><b>115</b></td><td class="num" style="border-top:2px solid var(--baseline)">49</td><td class="num" style="border-top:2px solid var(--baseline)">30</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>İzleme listesi</h2>
+      <p class="desc">Önümüzdeki haftalarda cevabını bu sekmede arayacağımız sorular.</p>
+      <div class="actions">
+        <div class="action">
+          <span class="prio p2">İzle</span>
+          <div><h3>MR deneme aboneliği ücretliye dönecek mi?</h3><p>Haziran'da TR'den başlayan Monthly Premium denemesi — dönerse ilk gerçek gelirin. Apple raporlarında "proceeds &gt; 0" olarak görünecek.</p></div>
+        </div>
+        <div class="action">
+          <span class="prio p2">İzle</span>
+          <div><h3>Lokalizasyonlar indirmeye dönüşüyor mu?</h3><p>AR/ID/UR (Vocal Tasbeeh) ve ES/PT (Match Reminder) yayına girince o ülkelerden gelen yeni indirmeler burada ayrışacak — yatırımın geri dönüş kanıtı.</p></div>
+        </div>
+        <div class="action">
+          <span class="prio p2">İzle</span>
+          <div><h3>Silme oranı düşüyor mu?</h3><p>Baz: Android'de 64 yüklemeye 49 silme. Onboarding iyileştirmeleri sonrası haftalık silme/yükleme oranının 0.5'in altına inmesi hedef.</p></div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /tab-takip -->
+
+  <script>
+    (function () {
+      var btns = [document.getElementById('tabbtn-genel'), document.getElementById('tabbtn-takip')];
+      var panels = [document.getElementById('tab-genel'), document.getElementById('tab-takip')];
+      btns.forEach(function (b, i) {
+        b.addEventListener('click', function () {
+          btns.forEach(function (x, j) {
+            x.setAttribute('aria-selected', i === j ? 'true' : 'false');
+            panels[j].hidden = i !== j;
+          });
+        });
+      });
+    })();
+  </script>
+
+  <footer class="foot">
+    <p><b>Kaynaklar:</b> App Store Connect Sales Reports API (tüm zamanlar) · Google Play Console istatistik raporları (Mart–Temmuz 2026, ülke kırılımı).</p>
+    <p>iOS rakamları ilk indirmelerdir; tekrar indirmeler (Vocal Tasbeeh 6, Snoutgram 7, Mutlu Zihin 2, Match Reminder 1) hariçtir. Android rakamları "Daily User Installs" toplamıdır. Kapalı test programı trafiği rakamlara dahil değildir. FamilyFlow yalnız App Store'da yayındadır. Gelir: Match Reminder "Monthly Premium" aboneliği (TR, Haziran 2026) deneme süresindedir.</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
