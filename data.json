@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-07-16T15:51:12.890Z",
+ "updatedAt": "2026-07-16T16:08:58.442Z",
  "baselineDate": "2026-07-13",
  "totalNew": 18,
  "newUninst": 7,
@@ -19,12 +19,20 @@
     "TR": 6,
     "AT": 1,
     "GE": 1
+   },
+   "byCountryIos": {},
+   "byCountryAndroid": {
+    "TR": 6,
+    "AT": 1,
+    "GE": 1
    }
   },
   "snout": {
    "ios": 0,
    "android": 0,
-   "byCountry": {}
+   "byCountry": {},
+   "byCountryIos": {},
+   "byCountryAndroid": {}
   },
   "mr": {
    "ios": 3,
@@ -35,12 +43,26 @@
     "MY": 1,
     "IR": 1,
     "FR": 2
+   },
+   "byCountryIos": {
+    "TR": 1,
+    "US": 1,
+    "MY": 1
+   },
+   "byCountryAndroid": {
+    "TR": 3,
+    "IR": 1,
+    "FR": 2
    }
   },
   "mz": {
    "ios": 0,
    "android": 1,
    "byCountry": {
+    "TR": 1
+   },
+   "byCountryIos": {},
+   "byCountryAndroid": {
     "TR": 1
    }
   }
