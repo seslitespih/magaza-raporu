@@ -1,7 +1,7 @@
 {
- "updatedAt": "2026-08-05T14:16:40.506Z",
+ "updatedAt": "2026-08-05T14:53:51.585Z",
  "baselineDate": "2026-07-13",
- "totalNew": 33,
+ "totalNew": 37,
  "newUninst": 22,
  "newCountries": [
   "AT",
@@ -15,7 +15,9 @@
   "IT",
   "BR",
   "CI",
-  "TH"
+  "TH",
+  "MY",
+  "ES"
  ],
  "proceedsByCur": {},
  "newByApp": {
@@ -50,10 +52,10 @@
    "byCountryAndroid": {}
   },
   "mr": {
-   "ios": 0,
+   "ios": 4,
    "android": 16,
    "byCountry": {
-    "TR": 5,
+    "TR": 6,
     "IR": 1,
     "FR": 2,
     "CA": 1,
@@ -61,9 +63,17 @@
     "IT": 3,
     "BR": 1,
     "CI": 1,
-    "TH": 1
+    "TH": 1,
+    "US": 1,
+    "MY": 1,
+    "ES": 1
    },
-   "byCountryIos": {},
+   "byCountryIos": {
+    "TR": 1,
+    "US": 1,
+    "MY": 1,
+    "ES": 1
+   },
    "byCountryAndroid": {
     "TR": 5,
     "IR": 1,
@@ -131,11 +141,11 @@
   },
   {
    "date": "2026-08-05",
-   "totalNew": 33,
+   "totalNew": 37,
    "perApp": {
     "vocal": 16,
     "snout": 0,
-    "mr": 16,
+    "mr": 20,
     "mz": 1
    }
   }
@@ -189,5 +199,6 @@
   "snout": 13,
   "mr": 13,
   "mz": 2
- }
+ },
+ "iosNote": "iOS verisi 24 Tem–5 Ağu arası Apple API anahtarı sorunuyla güncellenemedi; MR iOS son doğrulanan değerde (21 Tem). Tam güncelleme bekleniyor."
 }
