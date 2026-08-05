@@ -1,33 +1,45 @@
 {
- "updatedAt": "2026-07-21T04:04:29.538Z",
+ "updatedAt": "2026-08-05T14:16:40.506Z",
  "baselineDate": "2026-07-13",
- "totalNew": 26,
- "newUninst": 12,
+ "totalNew": 33,
+ "newUninst": 22,
  "newCountries": [
   "AT",
   "GE",
-  "MY",
-  "ES",
+  "DZ",
+  "DJ",
   "IR",
-  "FR"
+  "FR",
+  "CA",
+  "PT",
+  "IT",
+  "BR",
+  "CI",
+  "TH"
  ],
  "proceedsByCur": {},
  "newByApp": {
   "vocal": {
    "ios": 0,
-   "android": 13,
+   "android": 16,
    "byCountry": {
     "TR": 10,
     "AT": 1,
+    "TM": 1,
     "GE": 1,
-    "DE": 1
+    "DE": 1,
+    "DZ": 1,
+    "DJ": 1
    },
    "byCountryIos": {},
    "byCountryAndroid": {
     "TR": 10,
     "AT": 1,
+    "TM": 1,
     "GE": 1,
-    "DE": 1
+    "DE": 1,
+    "DZ": 1,
+    "DJ": 1
    }
   },
   "snout": {
@@ -38,26 +50,30 @@
    "byCountryAndroid": {}
   },
   "mr": {
-   "ios": 4,
-   "android": 8,
+   "ios": 0,
+   "android": 16,
    "byCountry": {
-    "TR": 6,
-    "US": 1,
-    "MY": 1,
-    "ES": 1,
+    "TR": 5,
     "IR": 1,
-    "FR": 2
+    "FR": 2,
+    "CA": 1,
+    "PT": 1,
+    "IT": 3,
+    "BR": 1,
+    "CI": 1,
+    "TH": 1
    },
-   "byCountryIos": {
-    "TR": 1,
-    "US": 1,
-    "MY": 1,
-    "ES": 1
-   },
+   "byCountryIos": {},
    "byCountryAndroid": {
     "TR": 5,
     "IR": 1,
-    "FR": 2
+    "FR": 2,
+    "CA": 1,
+    "PT": 1,
+    "IT": 3,
+    "BR": 1,
+    "CI": 1,
+    "TH": 1
    }
   },
   "mz": {
@@ -112,6 +128,16 @@
     "mr": 12,
     "mz": 1
    }
+  },
+  {
+   "date": "2026-08-05",
+   "totalNew": 33,
+   "perApp": {
+    "vocal": 16,
+    "snout": 0,
+    "mr": 16,
+    "mz": 1
+   }
   }
  ],
  "androidLive": true,
@@ -121,13 +147,15 @@
    "AT": 1,
    "BE": 1,
    "BA": 1,
-   "TM": 2,
+   "TM": 3,
    "RU": 2,
    "AZ": 4,
    "NL": 0,
    "GE": 1,
    "IL": 0,
-   "DE": 1
+   "DE": 1,
+   "DZ": 1,
+   "DJ": 1
   },
   "snout": {
    "TR": 5,
@@ -143,7 +171,13 @@
    "GR": 1,
    "IR": 1,
    "FR": 2,
-   "GB": 0
+   "GB": 0,
+   "CA": 1,
+   "PT": 1,
+   "IT": 3,
+   "BR": 1,
+   "CI": 1,
+   "TH": 1
   },
   "mz": {
    "TR": 2,
@@ -151,9 +185,9 @@
   }
  },
  "uninstCur": {
-  "vocal": 41,
+  "vocal": 43,
   "snout": 13,
-  "mr": 5,
+  "mr": 13,
   "mz": 2
  }
 }
