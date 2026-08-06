@@ -1,39 +1,70 @@
 {
- "updatedAt": "2026-08-05T14:53:51.585Z",
+ "updatedAt": "2026-08-06T11:37:12.080Z",
  "baselineDate": "2026-07-13",
- "totalNew": 37,
+ "totalNew": 95,
  "newUninst": 22,
  "newCountries": [
+  "MA",
+  "IQ",
+  "LB",
+  "EG",
+  "YE",
   "AT",
   "GE",
   "DZ",
   "DJ",
-  "IR",
+  "MY",
+  "SA",
+  "LU",
+  "ES",
+  "DE",
   "FR",
   "CA",
+  "BR",
+  "IR",
   "PT",
   "IT",
-  "BR",
   "CI",
-  "TH",
-  "MY",
-  "ES"
+  "TH"
  ],
  "proceedsByCur": {},
  "newByApp": {
   "vocal": {
-   "ios": 0,
+   "ios": 41,
    "android": 16,
    "byCountry": {
-    "TR": 10,
+    "TR": 17,
+    "DE": 3,
+    "TZ": 1,
+    "US": 9,
+    "CA": 1,
+    "SA": 15,
+    "MA": 1,
+    "RU": 1,
+    "IQ": 1,
+    "LB": 1,
+    "EG": 1,
+    "YE": 1,
     "AT": 1,
     "TM": 1,
     "GE": 1,
-    "DE": 1,
     "DZ": 1,
     "DJ": 1
    },
-   "byCountryIos": {},
+   "byCountryIos": {
+    "TR": 7,
+    "DE": 2,
+    "TZ": 1,
+    "US": 9,
+    "CA": 1,
+    "SA": 15,
+    "MA": 1,
+    "RU": 1,
+    "IQ": 1,
+    "LB": 1,
+    "EG": 1,
+    "YE": 1
+   },
    "byCountryAndroid": {
     "TR": 10,
     "AT": 1,
@@ -52,27 +83,38 @@
    "byCountryAndroid": {}
   },
   "mr": {
-   "ios": 4,
+   "ios": 21,
    "android": 16,
    "byCountry": {
-    "TR": 6,
+    "TR": 10,
+    "MY": 1,
+    "MA": 1,
+    "SA": 1,
+    "LU": 1,
+    "ES": 1,
+    "DE": 1,
+    "FR": 3,
+    "CA": 2,
+    "BR": 8,
+    "IQ": 1,
     "IR": 1,
-    "FR": 2,
-    "CA": 1,
     "PT": 1,
     "IT": 3,
-    "BR": 1,
     "CI": 1,
-    "TH": 1,
-    "US": 1,
-    "MY": 1,
-    "ES": 1
+    "TH": 1
    },
    "byCountryIos": {
-    "TR": 1,
-    "US": 1,
+    "TR": 5,
     "MY": 1,
-    "ES": 1
+    "MA": 1,
+    "SA": 1,
+    "LU": 1,
+    "ES": 1,
+    "DE": 1,
+    "FR": 1,
+    "CA": 1,
+    "BR": 7,
+    "IQ": 1
    },
    "byCountryAndroid": {
     "TR": 5,
@@ -148,6 +190,16 @@
     "mr": 20,
     "mz": 1
    }
+  },
+  {
+   "date": "2026-08-06",
+   "totalNew": 95,
+   "perApp": {
+    "vocal": 57,
+    "snout": 0,
+    "mr": 37,
+    "mz": 1
+   }
   }
  ],
  "androidLive": true,
@@ -199,6 +251,5 @@
   "snout": 13,
   "mr": 13,
   "mz": 2
- },
- "iosNote": "iOS verisi 24 Tem–5 Ağu arası Apple API anahtarı sorunuyla güncellenemedi; MR iOS son doğrulanan değerde (21 Tem). Tam güncelleme bekleniyor."
+ }
 }
