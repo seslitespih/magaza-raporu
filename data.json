@@ -1,8 +1,8 @@
 {
- "updatedAt": "2026-08-06T11:46:37.400Z",
+ "updatedAt": "2026-08-08T04:05:08.158Z",
  "baselineDate": "2026-07-13",
- "totalNew": 124,
- "newUninst": 22,
+ "totalNew": 161,
+ "newUninst": 45,
  "newCountries": [
   "MA",
   "IQ",
@@ -11,10 +11,12 @@
   "EG",
   "YE",
   "ID",
+  "OM",
   "AT",
   "GE",
   "DZ",
   "DJ",
+  "PK",
   "MY",
   "SA",
   "LU",
@@ -27,53 +29,61 @@
   "PT",
   "IT",
   "CI",
-  "TH"
+  "TH",
+  "SD",
+  "MX",
+  "GT",
+  "AR"
  ],
  "proceedsByCur": {},
  "newByApp": {
   "vocal": {
-   "ios": 62,
-   "android": 16,
+   "ios": 73,
+   "android": 19,
    "byCountry": {
-    "FR": 2,
-    "TR": 22,
+    "FR": 4,
+    "TR": 26,
     "DE": 3,
     "TZ": 1,
-    "US": 14,
+    "US": 16,
     "GB": 2,
-    "CA": 1,
+    "CA": 2,
     "SA": 18,
     "MA": 1,
     "RU": 1,
-    "IQ": 1,
+    "IQ": 2,
     "LB": 1,
     "TN": 1,
-    "EG": 3,
+    "EG": 4,
     "YE": 1,
     "ID": 1,
+    "OM": 1,
     "AT": 1,
     "TM": 1,
     "GE": 1,
     "DZ": 1,
-    "DJ": 1
+    "DJ": 1,
+    "JO": 1,
+    "PK": 1
    },
    "byCountryIos": {
-    "FR": 2,
-    "TR": 12,
+    "FR": 4,
+    "TR": 16,
     "DE": 2,
     "TZ": 1,
-    "US": 14,
+    "US": 16,
     "GB": 2,
     "CA": 1,
     "SA": 18,
     "MA": 1,
     "RU": 1,
-    "IQ": 1,
+    "IQ": 2,
     "LB": 1,
     "TN": 1,
-    "EG": 3,
+    "EG": 4,
     "YE": 1,
-    "ID": 1
+    "ID": 1,
+    "OM": 1
    },
    "byCountryAndroid": {
     "TR": 10,
@@ -82,7 +92,10 @@
     "GE": 1,
     "DE": 1,
     "DZ": 1,
-    "DJ": 1
+    "DJ": 1,
+    "JO": 1,
+    "CA": 1,
+    "PK": 1
    }
   },
   "snout": {
@@ -97,62 +110,72 @@
    "byCountryAndroid": {}
   },
   "mr": {
-   "ios": 28,
-   "android": 16,
+   "ios": 32,
+   "android": 32,
    "byCountry": {
-    "TR": 13,
-    "US": 2,
+    "TR": 20,
+    "US": 3,
     "MY": 1,
     "MA": 1,
     "SA": 2,
     "LU": 1,
     "ES": 1,
-    "DE": 1,
-    "FR": 3,
+    "DE": 3,
+    "FR": 1,
     "CA": 2,
-    "BR": 9,
+    "BR": 13,
     "IQ": 1,
     "IR": 1,
     "PT": 1,
-    "IT": 3,
+    "IT": 5,
     "CI": 1,
-    "TH": 1
+    "TH": 1,
+    "SD": 1,
+    "MX": 1,
+    "GT": 1,
+    "DZ": 1,
+    "AR": 2
    },
    "byCountryIos": {
     "TR": 8,
-    "US": 2,
+    "US": 3,
     "MY": 1,
     "MA": 1,
     "SA": 2,
     "LU": 1,
     "ES": 1,
-    "DE": 1,
+    "DE": 2,
     "FR": 1,
     "CA": 1,
-    "BR": 8,
+    "BR": 10,
     "IQ": 1
    },
    "byCountryAndroid": {
-    "TR": 5,
+    "TR": 12,
     "IR": 1,
-    "FR": 2,
     "CA": 1,
     "PT": 1,
-    "IT": 3,
-    "BR": 1,
+    "IT": 5,
+    "BR": 3,
     "CI": 1,
-    "TH": 1
+    "TH": 1,
+    "SD": 1,
+    "MX": 1,
+    "DE": 1,
+    "GT": 1,
+    "DZ": 1,
+    "AR": 2
    }
   },
   "mz": {
    "ios": 0,
-   "android": 1,
+   "android": 4,
    "byCountry": {
-    "TR": 1
+    "TR": 4
    },
    "byCountryIos": {},
    "byCountryAndroid": {
-    "TR": 1
+    "TR": 4
    }
   }
  },
@@ -216,6 +239,16 @@
     "mr": 44,
     "mz": 1
    }
+  },
+  {
+   "date": "2026-08-08",
+   "totalNew": 161,
+   "perApp": {
+    "vocal": 92,
+    "snout": 1,
+    "mr": 64,
+    "mz": 4
+   }
   }
  ],
  "androidLive": true,
@@ -233,7 +266,11 @@
    "IL": 0,
    "DE": 1,
    "DZ": 1,
-   "DJ": 1
+   "DJ": 1,
+   "BG": 0,
+   "JO": 1,
+   "CA": 1,
+   "PK": 1
   },
   "snout": {
    "TR": 5,
@@ -245,27 +282,33 @@
    "RU": 1
   },
   "mr": {
-   "TR": 8,
+   "TR": 15,
    "GR": 1,
    "IR": 1,
-   "FR": 2,
+   "FR": 0,
    "GB": 0,
    "CA": 1,
    "PT": 1,
-   "IT": 3,
-   "BR": 1,
+   "IT": 5,
+   "BR": 3,
    "CI": 1,
-   "TH": 1
+   "TH": 1,
+   "SD": 1,
+   "MX": 1,
+   "DE": 1,
+   "GT": 1,
+   "DZ": 1,
+   "AR": 2
   },
   "mz": {
-   "TR": 2,
+   "TR": 5,
    "VE": 1
   }
  },
  "uninstCur": {
-  "vocal": 43,
+  "vocal": 47,
   "snout": 13,
-  "mr": 13,
-  "mz": 2
+  "mr": 31,
+  "mz": 3
  }
 }
