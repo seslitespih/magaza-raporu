@@ -1,0 +1,47 @@
+name: Rapor verisini güncelle
+
+on:
+  schedule:
+    # Her gün 04:10 UTC = 07:10 TR. Cron UTC'dir; yaz/kış saati kaymasını dert etme.
+    - cron: '10 4 * * *'
+  workflow_dispatch:        # Actions sekmesinden elle de tetiklenebilir
+
+# Tek seferde tek koşu: elle tetikleme ile zamanlanmış koşu çakışıp
+# aynı dosyayı iki kez push etmeye çalışmasın.
+concurrency:
+  group: rapor-guncelle
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write       # data.json'ı commit'lemek için
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Veriyi çek ve data.json'ı yaz
+        env:
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_P8: ${{ secrets.ASC_P8 }}
+          ASC_VENDOR: ${{ secrets.ASC_VENDOR }}
+          GP_SA_JSON: ${{ secrets.GP_SA_JSON }}
+          GP_BUCKET: ${{ secrets.GP_BUCKET }}
+        run: node scripts/update_data.mjs
+
+      - name: Değiştiyse commit'le ve push'la
+        run: |
+          if git diff --quiet -- data.json; then
+            echo "data.json değişmedi — commit yok"
+            exit 0
+          fi
+          git config user.name "Rapor Bot"
+          git config user.email "ssaglamess@gmail.com"
+          git add data.json
+          git commit -m "Otomatik veri güncellemesi"
+          git push
