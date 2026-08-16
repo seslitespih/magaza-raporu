@@ -1,7 +1,7 @@
 {
- "updatedAt": "2026-08-15T04:43:39.430Z",
+ "updatedAt": "2026-08-16T04:48:16.705Z",
  "baselineDate": "2026-07-13",
- "totalNew": 244,
+ "totalNew": 256,
  "newUninst": 60,
  "newCountries": [
   "MA",
@@ -36,6 +36,7 @@
   "CI",
   "LY",
   "EC",
+  "BE",
   "IR",
   "PT",
   "TH",
@@ -48,18 +49,18 @@
  "proceedsByCur": {},
  "newByApp": {
   "vocal": {
-   "ios": 107,
+   "ios": 113,
    "android": 25,
    "byCountry": {
     "FR": 5,
-    "TR": 43,
+    "TR": 47,
     "DE": 4,
     "TZ": 1,
-    "US": 18,
+    "US": 19,
     "GB": 2,
     "CA": 2,
     "JO": 2,
-    "SA": 18,
+    "SA": 19,
     "MA": 1,
     "RU": 1,
     "IQ": 2,
@@ -83,14 +84,14 @@
    },
    "byCountryIos": {
     "FR": 5,
-    "TR": 33,
+    "TR": 37,
     "DE": 3,
     "TZ": 1,
-    "US": 18,
+    "US": 19,
     "GB": 2,
     "CA": 1,
     "JO": 1,
-    "SA": 18,
+    "SA": 19,
     "MA": 1,
     "RU": 1,
     "IQ": 2,
@@ -133,27 +134,28 @@
    "byCountryAndroid": {}
   },
   "mr": {
-   "ios": 70,
+   "ios": 76,
    "android": 37,
    "byCountry": {
-    "TR": 21,
+    "TR": 22,
     "US": 10,
     "MY": 1,
     "MA": 1,
-    "SA": 4,
+    "SA": 5,
     "LU": 1,
     "ES": 2,
     "DE": 6,
-    "FR": 5,
+    "FR": 6,
     "CA": 2,
-    "BR": 28,
+    "BR": 29,
     "IQ": 1,
     "DK": 1,
-    "JO": 1,
+    "JO": 2,
     "IT": 6,
     "CI": 2,
     "LY": 1,
     "EC": 2,
+    "BE": 1,
     "IR": 1,
     "PT": 1,
     "TH": 1,
@@ -166,24 +168,25 @@
     "UY": 1
    },
    "byCountryIos": {
-    "TR": 9,
+    "TR": 10,
     "US": 10,
     "MY": 1,
     "MA": 1,
-    "SA": 4,
+    "SA": 5,
     "LU": 1,
     "ES": 2,
     "DE": 5,
-    "FR": 5,
+    "FR": 6,
     "CA": 1,
-    "BR": 24,
+    "BR": 25,
     "IQ": 1,
     "DK": 1,
-    "JO": 1,
+    "JO": 2,
     "IT": 1,
     "CI": 1,
     "LY": 1,
-    "EC": 1
+    "EC": 1,
+    "BE": 1
    },
    "byCountryAndroid": {
     "TR": 12,
@@ -345,6 +348,16 @@
     "vocal": 132,
     "snout": 1,
     "mr": 107,
+    "mz": 4
+   }
+  },
+  {
+   "date": "2026-08-16",
+   "totalNew": 256,
+   "perApp": {
+    "vocal": 138,
+    "snout": 1,
+    "mr": 113,
     "mz": 4
    }
   }
