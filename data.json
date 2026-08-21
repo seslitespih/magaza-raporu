@@ -1,7 +1,7 @@
 {
- "updatedAt": "2026-08-20T04:49:49.245Z",
+ "updatedAt": "2026-08-21T04:51:41.027Z",
  "baselineDate": "2026-07-13",
- "totalNew": 310,
+ "totalNew": 321,
  "newUninst": 60,
  "newCountries": [
   "MA",
@@ -16,11 +16,12 @@
   "BF",
   "BH",
   "AE",
+  "CM",
+  "PK",
   "AT",
   "GE",
   "DZ",
   "DJ",
-  "PK",
   "SD",
   "MY",
   "SA",
@@ -50,11 +51,11 @@
  "proceedsByCur": {},
  "newByApp": {
   "vocal": {
-   "ios": 137,
+   "ios": 143,
    "android": 25,
    "byCountry": {
-    "FR": 10,
-    "TR": 54,
+    "FR": 11,
+    "TR": 56,
     "DE": 6,
     "TZ": 1,
     "US": 20,
@@ -73,20 +74,21 @@
     "OM": 4,
     "SN": 2,
     "BF": 1,
-    "BH": 2,
+    "BH": 3,
     "AE": 2,
     "BE": 1,
+    "CM": 1,
+    "PK": 3,
     "AT": 1,
     "TM": 1,
     "GE": 1,
     "DZ": 2,
     "DJ": 1,
-    "PK": 2,
     "SD": 1
    },
    "byCountryIos": {
-    "FR": 10,
-    "TR": 44,
+    "FR": 11,
+    "TR": 46,
     "DE": 5,
     "TZ": 1,
     "US": 20,
@@ -105,9 +107,11 @@
     "OM": 4,
     "SN": 2,
     "BF": 1,
-    "BH": 2,
+    "BH": 3,
     "AE": 1,
-    "BE": 1
+    "BE": 1,
+    "CM": 1,
+    "PK": 1
    },
    "byCountryAndroid": {
     "TR": 10,
@@ -138,16 +142,16 @@
    "byCountryAndroid": {}
   },
   "mr": {
-   "ios": 106,
+   "ios": 111,
    "android": 37,
    "byCountry": {
     "TR": 24,
     "US": 11,
     "MY": 1,
-    "MA": 1,
-    "SA": 9,
+    "MA": 2,
+    "SA": 10,
     "LU": 1,
-    "ES": 6,
+    "ES": 7,
     "DE": 9,
     "FR": 13,
     "CA": 2,
@@ -156,11 +160,12 @@
     "DK": 1,
     "JO": 2,
     "IT": 7,
-    "CI": 3,
+    "CI": 4,
     "LY": 1,
     "EC": 2,
     "BE": 1,
     "NL": 1,
+    "EG": 1,
     "IR": 1,
     "PT": 1,
     "TH": 1,
@@ -176,10 +181,10 @@
     "TR": 12,
     "US": 11,
     "MY": 1,
-    "MA": 1,
-    "SA": 9,
+    "MA": 2,
+    "SA": 10,
     "LU": 1,
-    "ES": 6,
+    "ES": 7,
     "DE": 8,
     "FR": 13,
     "CA": 1,
@@ -188,11 +193,12 @@
     "DK": 1,
     "JO": 2,
     "IT": 2,
-    "CI": 2,
+    "CI": 3,
     "LY": 1,
     "EC": 1,
     "BE": 1,
-    "NL": 1
+    "NL": 1,
+    "EG": 1
    },
    "byCountryAndroid": {
     "TR": 12,
@@ -404,6 +410,16 @@
     "vocal": 162,
     "snout": 1,
     "mr": 143,
+    "mz": 4
+   }
+  },
+  {
+   "date": "2026-08-21",
+   "totalNew": 321,
+   "perApp": {
+    "vocal": 168,
+    "snout": 1,
+    "mr": 148,
     "mz": 4
    }
   }
