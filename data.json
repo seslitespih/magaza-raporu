@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-08-28T16:35:53.403Z",
+ "updatedAt": "2026-08-29T11:02:07.534Z",
  "baselineDate": "2026-07-13",
  "totalNew": 529,
  "newUninst": 137,
@@ -557,6 +557,16 @@
   },
   {
    "date": "2026-08-28",
+   "totalNew": 529,
+   "perApp": {
+    "vocal": 273,
+    "snout": 2,
+    "mr": 244,
+    "mz": 10
+   }
+  },
+  {
+   "date": "2026-08-29",
    "totalNew": 529,
    "perApp": {
     "vocal": 273,
