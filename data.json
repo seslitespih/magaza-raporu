@@ -1,7 +1,7 @@
 {
- "updatedAt": "2026-09-08T08:50:08.966Z",
+ "updatedAt": "2026-09-09T08:56:32.068Z",
  "baselineDate": "2026-07-13",
- "totalNew": 668,
+ "totalNew": 681,
  "newUninst": 137,
  "newCountries": [
   "MA",
@@ -28,6 +28,7 @@
   "MR",
   "CO",
   "IE",
+  "QA",
   "AT",
   "GE",
   "DZ",
@@ -70,12 +71,12 @@
  },
  "newByApp": {
   "vocal": {
-   "ios": 303,
+   "ios": 312,
    "android": 59,
    "byCountry": {
     "FR": 19,
-    "TR": 118,
-    "DE": 15,
+    "TR": 123,
+    "DE": 16,
     "NG": 4,
     "TZ": 1,
     "US": 31,
@@ -83,7 +84,7 @@
     "CA": 6,
     "MY": 2,
     "JO": 3,
-    "SA": 48,
+    "SA": 50,
     "AU": 2,
     "MA": 3,
     "RU": 3,
@@ -112,6 +113,7 @@
     "CO": 1,
     "IE": 1,
     "AZ": 1,
+    "QA": 1,
     "AT": 1,
     "TM": 1,
     "GE": 1,
@@ -124,8 +126,8 @@
    },
    "byCountryIos": {
     "FR": 18,
-    "TR": 107,
-    "DE": 14,
+    "TR": 112,
+    "DE": 15,
     "NG": 2,
     "TZ": 1,
     "US": 31,
@@ -133,7 +135,7 @@
     "CA": 5,
     "MY": 2,
     "JO": 2,
-    "SA": 47,
+    "SA": 49,
     "AU": 2,
     "MA": 3,
     "RU": 2,
@@ -161,7 +163,8 @@
     "MR": 1,
     "CO": 1,
     "IE": 1,
-    "AZ": 1
+    "AZ": 1,
+    "QA": 1
    },
    "byCountryAndroid": {
     "TR": 11,
@@ -206,20 +209,20 @@
    "byCountryAndroid": {}
   },
   "mr": {
-   "ios": 210,
+   "ios": 214,
    "android": 84,
    "byCountry": {
-    "TR": 36,
+    "TR": 37,
     "US": 17,
     "MY": 1,
     "MA": 5,
-    "SA": 17,
+    "SA": 18,
     "LU": 2,
     "ES": 25,
     "DE": 18,
     "FR": 23,
     "CA": 2,
-    "BR": 64,
+    "BR": 66,
     "IQ": 3,
     "HN": 1,
     "NL": 2,
@@ -250,17 +253,17 @@
     "PE": 1
    },
    "byCountryIos": {
-    "TR": 15,
+    "TR": 16,
     "US": 15,
     "MY": 1,
     "MA": 4,
-    "SA": 17,
+    "SA": 18,
     "LU": 2,
     "ES": 20,
     "DE": 17,
     "FR": 23,
     "CA": 1,
-    "BR": 45,
+    "BR": 47,
     "IQ": 3,
     "HN": 1,
     "NL": 1,
@@ -692,6 +695,16 @@
     "vocal": 362,
     "snout": 2,
     "mr": 294,
+    "mz": 10
+   }
+  },
+  {
+   "date": "2026-09-09",
+   "totalNew": 681,
+   "perApp": {
+    "vocal": 371,
+    "snout": 2,
+    "mr": 298,
     "mz": 10
    }
   }
