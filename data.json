@@ -1,7 +1,7 @@
 {
- "updatedAt": "2026-09-22T09:16:51.833Z",
+ "updatedAt": "2026-09-23T09:17:00.498Z",
  "baselineDate": "2026-07-13",
- "totalNew": 952,
+ "totalNew": 957,
  "newUninst": 203,
  "newCountries": [
   "MA",
@@ -85,7 +85,7 @@
  },
  "newByApp": {
   "vocal": {
-   "ios": 416,
+   "ios": 421,
    "android": 138,
    "byCountry": {
     "FR": 26,
@@ -95,17 +95,17 @@
     "TZ": 1,
     "US": 44,
     "NL": 1,
-    "GB": 9,
+    "GB": 10,
     "CA": 10,
     "MY": 3,
     "JO": 4,
-    "SA": 63,
+    "SA": 64,
     "AU": 6,
-    "MA": 8,
+    "MA": 10,
     "RU": 5,
     "IQ": 6,
     "LB": 2,
-    "AE": 17,
+    "AE": 18,
     "BH": 3,
     "BE": 4,
     "TN": 7,
@@ -161,17 +161,17 @@
     "TZ": 1,
     "US": 44,
     "NL": 1,
-    "GB": 5,
+    "GB": 6,
     "CA": 8,
     "MY": 3,
     "JO": 2,
-    "SA": 56,
+    "SA": 57,
     "AU": 4,
-    "MA": 4,
+    "MA": 6,
     "RU": 2,
     "IQ": 3,
     "LB": 2,
-    "AE": 12,
+    "AE": 13,
     "BH": 3,
     "BE": 4,
     "TN": 5,
@@ -903,6 +903,16 @@
    "totalNew": 952,
    "perApp": {
     "vocal": 554,
+    "snout": 3,
+    "mr": 385,
+    "mz": 10
+   }
+  },
+  {
+   "date": "2026-09-23",
+   "totalNew": 957,
+   "perApp": {
+    "vocal": 559,
     "snout": 3,
     "mr": 385,
     "mz": 10
