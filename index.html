@@ -18,6 +18,7 @@
     --border: rgba(11,11,11,0.10);
     --ios: #2a78d6;
     --android: #1baf7a;
+    --web: #8a5cd0;
     --good: #0ca30c;
     --good-text: #006300;
     --critical: #d03b3b;
@@ -36,6 +37,7 @@
       --border: rgba(255,255,255,0.10);
       --ios: #3987e5;
       --android: #199e70;
+    --web: #a07ce0;
       --good-text: #0ca30c;
       --critical: #d03b3b;
       --wash: rgba(255,255,255,0.06);
@@ -44,13 +46,13 @@
   :root[data-theme="light"] {
     --page: #f9f9f7; --surface: #fcfcfb; --ink: #0b0b0b; --ink-2: #52514e;
     --muted: #898781; --grid: #e1e0d9; --baseline: #c3c2b7; --border: rgba(11,11,11,0.10);
-    --ios: #2a78d6; --android: #1baf7a; --good-text: #006300; --critical: #d03b3b;
+    --ios: #2a78d6; --android: #1baf7a; --web: #8a5cd0; --good-text: #006300; --critical: #d03b3b;
     --wash: rgba(11,11,11,0.04);
   }
   :root[data-theme="dark"] {
     --page: #0d0d0d; --surface: #1a1a19; --ink: #ffffff; --ink-2: #c3c2b7;
     --muted: #898781; --grid: #2c2c2a; --baseline: #383835; --border: rgba(255,255,255,0.10);
-    --ios: #3987e5; --android: #199e70; --good-text: #0ca30c; --critical: #d03b3b;
+    --ios: #3987e5; --android: #199e70; --web: #a07ce0; --good-text: #0ca30c; --critical: #d03b3b;
     --wash: rgba(255,255,255,0.06);
   }
 
@@ -124,6 +126,16 @@
   .cocard { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
   .cocard h3 { margin: 0 0 2px; font-size: 14px; font-weight: 700; }
   .cocard .cosub { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+  #web-sites { grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); }
+  .webstats { display: flex; gap: 22px; margin: 0 0 12px; flex-wrap: wrap; }
+  .webstats .n { display: block; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+  .webstats .l { font-size: 11.5px; color: var(--muted); }
+  .spark { display: flex; align-items: flex-end; gap: 2px; height: 56px; margin: 0 0 12px; border-bottom: 1px solid var(--baseline); }
+  .spark span { flex: 1 1 0; background: var(--web); border-radius: 2px 2px 0 0; min-height: 1px; }
+  .spark span:hover { opacity: 0.75; }
+  .webtable { width: 100%; font-size: 12.5px; }
+  .webtable td, .webtable th { padding: 4px 6px; }
+  .weberr { font-size: 12.5px; color: var(--ink-2); }
   .corow { display: grid; grid-template-columns: 92px 1fr 30px; gap: 8px; align-items: center; padding: 3.5px 0; }
   .corow .cname { font-size: 12.5px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .cobar-track { height: 12px; display: flex; align-items: center; }
@@ -597,6 +609,14 @@
     </div>
 
     <section>
+      <h2>Web siteleri: günlük ziyaretçi</h2>
+      <p class="desc">Google Analytics'ten son 30 gün. "Kişi" = o gün siteye giren tekil ziyaretçi; site adı, trafiğin geldiği alan adından okunur.</p>
+      <div class="countries" id="web-sites">
+        <div class="cocard weberr">Google Analytics bağlantısı bekleniyor — servis hesabı mülklere "Görüntüleyici" olarak eklenip Analytics Data API açıldığında ilk veri bir sonraki sabah güncellemesiyle gelir.</div>
+      </div>
+    </section>
+
+    <section>
       <h2>Haftalık akış</h2>
       <p class="desc">Her satır bir haftalık güncelleme. Uygulama başına yeni indirme sayısı ve dikkat çeken olaylar.</p>
       <div class="card tablewrap">
@@ -714,6 +734,43 @@
         }
         fresh.style.display = 'block';
 
+        // web siteleri (GA4)
+        var webSites = ((d.web || {}).sites || []);
+        if (webSites.length) {
+          var fmt = function (n) { return n.toLocaleString('tr-TR'); };
+          var gun = function (iso) { return iso.slice(8, 10) + '.' + iso.slice(5, 7); };
+          // veri olanlar önce, en çok ziyaretçiden aza
+          webSites.sort(function (a, b) {
+            var s = function (x) { return (x.daily || []).reduce(function (t, r) { return t + r.users; }, 0); };
+            return s(b) - s(a);
+          });
+          t('web-sites').innerHTML = webSites.map(function (w) {
+            var title = '<h3>' + (w.host || w.name) + '</h3><p class="cosub">GA4 mülkü ' + w.property +
+              (w.host && w.name ? ' · ' + w.name : '') + (w.stale ? ' · <span style="color:var(--critical)">son çekim başarısız, eski veri</span>' : '') + '</p>';
+            if (!w.daily) {
+              return '<div class="cocard">' + title + '<p class="weberr">Veri alınamadı (' + w.error + '). ' +
+                (/403|PERMISSION/.test(w.error) ? 'Servis hesabını bu mülke "Görüntüleyici" olarak ekleyin ve Analytics Data API\'yi açın.' : '') + '</p></div>';
+            }
+            var days = w.daily, last = days[days.length - 1] || { users: 0, date: '' };
+            // GA'nın tekil sayısı yoksa günlük toplam (üst sınır) — "≤" ile işaretli
+            var tekil = function (u, arr) { return u != null ? fmt(u) : '≤' + fmt(arr.reduce(function (t, r) { return t + r.users; }, 0)); };
+            var max = Math.max.apply(null, days.map(function (r) { return r.users; }).concat([1]));
+            var spark = '<div class="spark" role="img" aria-label="Son 30 gün günlük ziyaretçi">' + days.map(function (r) {
+              return '<span style="height:' + Math.max(2, Math.round(r.users / max * 100)) + '%" title="' + gun(r.date) + ': ' + r.users + ' kişi"></span>';
+            }).join('') + '</div>';
+            var rows = days.slice(-14).reverse().map(function (r) {
+              return '<tr><td>' + gun(r.date) + '</td><td class="num"><b>' + fmt(r.users) + '</b></td><td class="num">' + fmt(r.newUsers) +
+                '</td><td class="num">' + fmt(r.sessions) + '</td><td class="num">' + fmt(r.views) + '</td></tr>';
+            }).join('');
+            return '<div class="cocard">' + title +
+              '<div class="webstats"><div><span class="n">' + fmt(last.users) + '</span><span class="l">dün (' + (last.date ? gun(last.date) : '—') + ')</span></div>' +
+              '<div><span class="n">' + tekil(w.users7, days.slice(-7)) + '</span><span class="l">son 7 gün, tekil</span></div>' +
+              '<div><span class="n">' + tekil(w.users30, days) + '</span><span class="l">son 30 gün, tekil</span></div></div>' + spark +
+              '<div class="tablewrap"><table class="webtable"><thead><tr><th>Gün</th><th class="num">Kişi</th><th class="num">Yeni</th><th class="num">Oturum</th><th class="num">Sayfa</th></tr></thead><tbody>' +
+              rows + '</tbody></table></div></div>';
+          }).join('');
+        }
+
         var hist = t('hist-body');
         (d.history || []).forEach(function (h) {
           var tr = document.createElement('tr');
@@ -755,7 +812,7 @@
   </script>
 
   <footer class="foot">
-    <p><b>Kaynaklar:</b> App Store Connect Sales Reports API (tüm zamanlar) · Google Play Console istatistik raporları (Mart–Temmuz 2026, ülke kırılımı).</p>
+    <p><b>Kaynaklar:</b> App Store Connect Sales Reports API (tüm zamanlar) · Google Play Console istatistik raporları (Mart–Temmuz 2026, ülke kırılımı) · Google Analytics 4 Data API (web siteleri, son 30 gün).</p>
     <p>iOS rakamları ilk indirmelerdir; tekrar indirmeler (Vocal Tasbeeh 6, Snoutgram 7, Mutlu Zihin 2, Match Reminder 1) hariçtir. Android rakamları "Daily User Installs" toplamıdır. Kapalı test programı trafiği rakamlara dahil değildir. FamilyFlow yalnız App Store'da yayındadır. Gelir: Match Reminder "Monthly Premium" aboneliği (TR, Haziran 2026) deneme süresindedir.</p>
   </footer>
 

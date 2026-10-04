@@ -38,6 +38,16 @@ const APPS = {
 };
 const PKGS = { 'com.sesliTesbih.app': 'vocal', 'com.snoutgram.app': 'snout', 'com.mutluzihin.app': 'mz', 'com.machatirlatici.app': 'mr' };
 
+// Google Analytics 4 mülkleri (hesap 367872872). Hangi siteye ait oldukları
+// veriden (en çok trafik alan hostName) okunur; ad yalnız yedek etikettir.
+// Erişim: GP_SA_JSON'daki servis hesabı her mülkte "Görüntüleyici" olmalı ve
+// Cloud projesinde "Google Analytics Data API" açık olmalı.
+const GA_PROPERTIES = {
+  '549781273': 'Sports on TV',
+  '504395026': 'akgkalitekontrol',
+  '514631876': 'stok-a1c59',
+};
+
 // ---- 13 Temmuz 2026 baz değerleri (Hindistan hariç: tamamı testçi) ----
 const BASE = {
   ios: {
@@ -80,6 +90,20 @@ function get(hostname, pathname, headers) {
     req.on('error', reject);
     // Bu olmadan asılı bir bağlantı tüm scripti sonsuza dek dondurur.
     req.setTimeout(30000, () => req.destroy(new Error('timeout')));
+  });
+}
+
+function postJSON(hostname, pathname, headers, payload) {
+  const body = JSON.stringify(payload);
+  return new Promise((resolve, reject) => {
+    const req = https.request({ hostname, path: pathname, method: 'POST', headers: { ...headers, 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) } }, (res) => {
+      const ch = [];
+      res.on('data', (c) => ch.push(c));
+      res.on('end', () => resolve({ status: res.statusCode, buf: Buffer.concat(ch) }));
+    });
+    req.on('error', reject);
+    req.setTimeout(30000, () => req.destroy(new Error('timeout')));
+    req.write(body); req.end();
   });
 }
 
@@ -149,17 +173,17 @@ async function appleSales() {
   return { ios, proceedsByCur, ok: okCount > 0 && failCount === 0 };
 }
 
-async function googleToken() {
+async function googleToken(scope) {
   const now = Math.floor(Date.now() / 1000);
   const h = Buffer.from(JSON.stringify({ alg: 'RS256', typ: 'JWT' })).toString('base64url');
-  const c = Buffer.from(JSON.stringify({ iss: GP_SA.client_email, scope: 'https://www.googleapis.com/auth/devstorage.read_only', aud: 'https://oauth2.googleapis.com/token', iat: now, exp: now + 3600 })).toString('base64url');
+  const c = Buffer.from(JSON.stringify({ iss: GP_SA.client_email, scope, aud: 'https://oauth2.googleapis.com/token', iat: now, exp: now + 3600 })).toString('base64url');
   const s = crypto.createSign('RSA-SHA256'); s.update(`${h}.${c}`);
   const jwt = `${h}.${c}.${s.sign(GP_SA.private_key).toString('base64url')}`;
   const body = `grant_type=${encodeURIComponent('urn:ietf:params:oauth:grant-type:jwt-bearer')}&assertion=${jwt}`;
   return new Promise((resolve) => {
     const req = https.request({ hostname: 'oauth2.googleapis.com', path: '/token', method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Content-Length': Buffer.byteLength(body) } }, (res) => {
       let d = ''; res.on('data', (x) => d += x);
-      res.on('end', () => resolve(JSON.parse(d).access_token || null));
+      res.on('end', () => { try { resolve(JSON.parse(d).access_token || null); } catch { resolve(null); } });
     });
     req.on('error', () => resolve(null));
     req.write(body); req.end();
@@ -167,7 +191,7 @@ async function googleToken() {
 }
 
 async function googleInstalls() {
-  const token = await googleToken();
+  const token = await googleToken('https://www.googleapis.com/auth/devstorage.read_only');
   if (!token) return null;
   const android = { vocal: {}, snout: {}, mr: {}, mz: {} };
   const uninst = { vocal: 0, snout: 0, mr: 0, mz: 0 };
@@ -201,6 +225,55 @@ async function googleInstalls() {
   return any ? { android, uninst } : null;
 }
 
+// Web siteleri: GA4 Data API'den son 30 günün günlük ziyaretçi sayıları.
+// Mülk başına hata (izin yok vb.) diğerlerini durdurmaz; o mülk `error` ile döner.
+async function gaWeb() {
+  const token = await googleToken('https://www.googleapis.com/auth/analytics.readonly');
+  if (!token) return null;
+  const range = [{ startDate: '30daysAgo', endDate: 'yesterday' }];
+  const report = async (id, req) => {
+    let r = null;
+    try { r = await postJSON('analyticsdata.googleapis.com', `/v1beta/properties/${id}:runReport`, { Authorization: `Bearer ${token}` }, req); } catch { r = null; }
+    if (!r) return { error: 'bağlantı hatası' };
+    const j = (() => { try { return JSON.parse(r.buf.toString('utf8')); } catch { return {}; } })();
+    if (r.status !== 200) return { error: `${r.status} ${j.error?.status || ''}`.trim() };
+    return { rows: j.rows || [] };
+  };
+  const sites = [];
+  for (const [id, label] of Object.entries(GA_PROPERTIES)) {
+    const daily = await report(id, {
+      dateRanges: range,
+      dimensions: [{ name: 'date' }],
+      metrics: [{ name: 'activeUsers' }, { name: 'newUsers' }, { name: 'sessions' }, { name: 'screenPageViews' }],
+      orderBys: [{ dimension: { dimensionName: 'date' } }],
+      keepEmptyRows: true,
+    });
+    if (daily.error) { sites.push({ property: id, name: label, error: daily.error }); continue; }
+    const hosts = await report(id, {
+      dateRanges: range,
+      dimensions: [{ name: 'hostName' }],
+      metrics: [{ name: 'sessions' }],
+      orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
+      limit: 5,
+    });
+    // Tekil kişi: günlükleri toplamak aynı kişiyi birden çok sayar, GA'ya ayrı sor.
+    const uniq = await report(id, {
+      dateRanges: [{ startDate: '7daysAgo', endDate: 'yesterday', name: 'd7' }, { startDate: '30daysAgo', endDate: 'yesterday', name: 'd30' }],
+      metrics: [{ name: 'activeUsers' }],
+    });
+    const uniqBy = (n) => parseInt((uniq.rows || []).find((r) => r.dimensionValues?.[0]?.value === n)?.metricValues[0].value) || 0;
+    const host = (hosts.rows || []).map((r) => r.dimensionValues[0].value.replace(/^www\./, ''))
+      .find((h) => h && h !== '(not set)' && h !== 'localhost' && !/^\d+\.\d+\.\d+\.\d+$/.test(h)) || null;
+    const days = daily.rows.map((r) => {
+      const d = r.dimensionValues[0].value; // YYYYMMDD
+      const [u, n, s, v] = r.metricValues.map((m) => parseInt(m.value) || 0);
+      return { date: `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`, users: u, newUsers: n, sessions: s, views: v };
+    }).sort((a, b) => a.date.localeCompare(b.date));
+    sites.push({ property: id, name: label, host, users7: uniq.error ? null : uniqBy('d7'), users30: uniq.error ? null : uniqBy('d30'), daily: days });
+  }
+  return { sites };
+}
+
 function diffMap(cur, base) {
   const out = {};
   for (const [k, v] of Object.entries(cur || {})) {
@@ -216,6 +289,15 @@ async function main() {
 
   const apple = await appleSales();
   const goog = await googleInstalls();
+  const ga = await gaWeb();
+  if (ga) {
+    // Erişilemeyen mülkün önceki verisini koru (stale işaretiyle) — boş yazma.
+    for (const site of ga.sites) {
+      const old = site.error && (prev.web?.sites || []).find((x) => x.property === site.property && x.daily);
+      if (old) Object.assign(site, { host: old.host, users7: old.users7, users30: old.users30, daily: old.daily, stale: true });
+    }
+  }
+  log(`web: ${ga ? ga.sites.map((x) => `${x.host || x.name} ${x.error ? 'HATA ' + x.error : 'ok'}`).join(', ') : 'GA token alınamadı — önceki değerler korunuyor'}`);
   log(`apple ${apple.ok ? 'ok' : 'ERİŞİM YOK/EKSİK — iOS son bilinen değerler korunuyor'} (proceeds ${JSON.stringify(apple.proceedsByCur)}); google ${goog ? 'ok' : 'ERİŞİM YOK — Android son bilinen değerler korunuyor'}`);
 
   const androidCur = goog ? goog.android : (prev.androidCur || BASE.android);
@@ -264,11 +346,13 @@ async function main() {
     totalNew,
     newUninst,
     newCountries: [...newCountries],
-    proceedsByCur: apple.proceedsByCur,
+    // Apple verisi eksikse geliri silme — son bilinen değeri koru.
+    proceedsByCur: apple.ok ? apple.proceedsByCur : (prev.proceedsByCur || {}),
     newByApp,
     history,
     androidLive: !!goog,
     androidCur, uninstCur,
+    web: ga ? { updatedAt: new Date().toISOString(), sites: ga.sites } : (prev.web || null),
   }, null, 1));
   log(`data.json yazıldı — yeni indirme: ${totalNew}`);
 }
