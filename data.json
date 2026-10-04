@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-10-04T14:38:04.655Z",
+ "updatedAt": "2026-10-04T14:39:52.400Z",
  "baselineDate": "2026-07-13",
  "totalNew": 1445,
  "newUninst": 451,
@@ -1232,20 +1232,20 @@
   "mz": 19
  },
  "web": {
-  "updatedAt": "2026-10-04T14:38:04.655Z",
+  "updatedAt": "2026-10-04T14:39:52.401Z",
   "sites": [
    {
     "property": "504395026",
     "name": "akgkalitekontrol",
-    "host": "mutlu-zihin-backend.vercel.app",
+    "host": "mutluzihin.com",
     "hosts": [
-     {
-      "host": "mutlu-zihin-backend.vercel.app",
-      "sessions": 24
-     },
      {
       "host": "mutluzihin.com",
       "sessions": 15
+     },
+     {
+      "host": "mutlu-zihin-backend.vercel.app",
+      "sessions": 24
      }
     ],
     "users7": 18,
@@ -1690,15 +1690,11 @@
     "hosts": [
      {
       "host": "sportstvtoday.com",
-      "sessions": 47
+      "sessions": 69
      },
      {
       "host": "sportsontv.pages.dev",
       "sessions": 40
-     },
-     {
-      "host": "sportstvtoday.com",
-      "sessions": 22
      }
     ],
     "users7": 42,
