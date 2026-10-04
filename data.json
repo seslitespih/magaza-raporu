@@ -1,5 +1,5 @@
 {
- "updatedAt": "2026-10-04T14:34:06.700Z",
+ "updatedAt": "2026-10-04T14:38:04.655Z",
  "baselineDate": "2026-07-13",
  "totalNew": 1445,
  "newUninst": 451,
@@ -1232,12 +1232,22 @@
   "mz": 19
  },
  "web": {
-  "updatedAt": "2026-10-04T14:34:06.700Z",
+  "updatedAt": "2026-10-04T14:38:04.655Z",
   "sites": [
    {
     "property": "504395026",
     "name": "akgkalitekontrol",
     "host": "mutlu-zihin-backend.vercel.app",
+    "hosts": [
+     {
+      "host": "mutlu-zihin-backend.vercel.app",
+      "sessions": 24
+     },
+     {
+      "host": "mutluzihin.com",
+      "sessions": 15
+     }
+    ],
     "users7": 18,
     "users30": 43,
     "daily": [
@@ -1247,6 +1257,27 @@
       "newUsers": 1,
       "sessions": 1,
       "views": 1
+     },
+     {
+      "date": "2026-09-05",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-06",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-07",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
      },
      {
       "date": "2026-09-08",
@@ -1284,11 +1315,32 @@
       "views": 1
      },
      {
+      "date": "2026-09-13",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-14",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
       "date": "2026-09-15",
       "users": 1,
       "newUsers": 1,
       "sessions": 1,
       "views": 2
+     },
+     {
+      "date": "2026-09-16",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
      },
      {
       "date": "2026-09-17",
@@ -1333,6 +1385,13 @@
       "views": 3
      },
      {
+      "date": "2026-09-23",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
       "date": "2026-09-24",
       "users": 0,
       "newUsers": 0,
@@ -1345,6 +1404,13 @@
       "newUsers": 0,
       "sessions": 2,
       "views": 2
+     },
+     {
+      "date": "2026-09-26",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
      },
      {
       "date": "2026-09-27",
@@ -1401,14 +1467,240 @@
     "property": "514631876",
     "name": "stok-a1c59",
     "host": null,
+    "hosts": [],
     "users7": 0,
     "users30": 0,
-    "daily": []
+    "daily": [
+     {
+      "date": "2026-09-04",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-05",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-06",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-07",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-08",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-09",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-10",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-11",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-12",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-13",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-14",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-15",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-16",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-17",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-18",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-19",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-20",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-21",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-22",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-23",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-24",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-25",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-26",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-27",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-28",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-29",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-09-30",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-10-01",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-10-02",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
+      "date": "2026-10-03",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     }
+    ]
    },
    {
     "property": "549781273",
     "name": "Sports on TV",
     "host": "sportstvtoday.com",
+    "hosts": [
+     {
+      "host": "sportstvtoday.com",
+      "sessions": 47
+     },
+     {
+      "host": "sportsontv.pages.dev",
+      "sessions": 40
+     },
+     {
+      "host": "sportstvtoday.com",
+      "sessions": 22
+     }
+    ],
     "users7": 42,
     "users30": 107,
     "daily": [
@@ -1446,6 +1738,13 @@
       "newUsers": 1,
       "sessions": 1,
       "views": 1
+     },
+     {
+      "date": "2026-09-09",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
      },
      {
       "date": "2026-09-10",
@@ -1490,6 +1789,13 @@
       "views": 1
      },
      {
+      "date": "2026-09-16",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
+     },
+     {
       "date": "2026-09-17",
       "users": 2,
       "newUsers": 2,
@@ -1516,6 +1822,13 @@
       "newUsers": 3,
       "sessions": 3,
       "views": 3
+     },
+     {
+      "date": "2026-09-21",
+      "users": 0,
+      "newUsers": 0,
+      "sessions": 0,
+      "views": 0
      },
      {
       "date": "2026-09-22",
