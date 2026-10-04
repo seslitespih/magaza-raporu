@@ -746,12 +746,17 @@
           });
           t('web-sites').innerHTML = webSites.map(function (w) {
             var title = '<h3>' + (w.host || w.name) + '</h3><p class="cosub">GA4 mülkü ' + w.property +
-              (w.host && w.name ? ' · ' + w.name : '') + (w.stale ? ' · <span style="color:var(--critical)">son çekim başarısız, eski veri</span>' : '') + '</p>';
+              (w.host && w.name ? ' · ' + w.name : '') +
+              ((w.hosts || []).length > 1 ? '<br>diğer alan adları: ' + w.hosts.slice(1).map(function (h) { return h.host + ' (' + h.sessions + ' oturum)'; }).join(', ') : '') + (w.stale ? ' · <span style="color:var(--critical)">son çekim başarısız, eski veri</span>' : '') + '</p>';
             if (!w.daily) {
               return '<div class="cocard">' + title + '<p class="weberr">Veri alınamadı (' + w.error + '). ' +
                 (/403|PERMISSION/.test(w.error) ? 'Servis hesabını bu mülke "Görüntüleyici" olarak ekleyin ve Analytics Data API\'yi açın.' : '') + '</p></div>';
             }
-            var days = w.daily, last = days[days.length - 1] || { users: 0, date: '' };
+            var days = w.daily;
+            if (!days.some(function (r) { return r.users; })) {
+              return '<div class="cocard">' + title + '<p class="weberr">Son 30 günde ziyaret yok.</p></div>';
+            }
+            var last = days[days.length - 1] || { users: 0, date: '' };
             // GA'nın tekil sayısı yoksa günlük toplam (üst sınır) — "≤" ile işaretli
             var tekil = function (u, arr) { return u != null ? fmt(u) : '≤' + fmt(arr.reduce(function (t, r) { return t + r.users; }, 0)); };
             var max = Math.max.apply(null, days.map(function (r) { return r.users; }).concat([1]));

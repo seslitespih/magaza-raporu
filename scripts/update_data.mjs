@@ -246,7 +246,6 @@ async function gaWeb() {
       dimensions: [{ name: 'date' }],
       metrics: [{ name: 'activeUsers' }, { name: 'newUsers' }, { name: 'sessions' }, { name: 'screenPageViews' }],
       orderBys: [{ dimension: { dimensionName: 'date' } }],
-      keepEmptyRows: true,
     });
     if (daily.error) { sites.push({ property: id, name: label, error: daily.error }); continue; }
     const hosts = await report(id, {
@@ -262,14 +261,22 @@ async function gaWeb() {
       metrics: [{ name: 'activeUsers' }],
     });
     const uniqBy = (n) => parseInt((uniq.rows || []).find((r) => r.dimensionValues?.[0]?.value === n)?.metricValues[0].value) || 0;
-    const host = (hosts.rows || []).map((r) => r.dimensionValues[0].value.replace(/^www\./, ''))
-      .find((h) => h && h !== '(not set)' && h !== 'localhost' && !/^\d+\.\d+\.\d+\.\d+$/.test(h)) || null;
-    const days = daily.rows.map((r) => {
+    const hostList = (hosts.rows || []).map((r) => ({ host: r.dimensionValues[0].value.replace(/^www\./, ''), sessions: parseInt(r.metricValues[0].value) || 0 }))
+      .filter((h) => h.host && h.host !== '(not set)' && h.host !== 'localhost' && !/^\d+\.\d+\.\d+\.\d+$/.test(h.host));
+    const host = hostList[0]?.host || null;
+    // GA ziyaretsiz günleri hiç döndürmüyor — 30 günü 0'larla tamamla.
+    const byDate = {};
+    for (const r of daily.rows) {
       const d = r.dimensionValues[0].value; // YYYYMMDD
       const [u, n, s, v] = r.metricValues.map((m) => parseInt(m.value) || 0);
-      return { date: `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`, users: u, newUsers: n, sessions: s, views: v };
-    }).sort((a, b) => a.date.localeCompare(b.date));
-    sites.push({ property: id, name: label, host, users7: uniq.error ? null : uniqBy('d7'), users30: uniq.error ? null : uniqBy('d30'), daily: days });
+      byDate[`${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`] = { users: u, newUsers: n, sessions: s, views: v };
+    }
+    const days = [];
+    for (let i = 30; i >= 1; i--) {
+      const date = new Date(Date.now() - i * 864e5).toISOString().slice(0, 10);
+      days.push({ date, ...(byDate[date] || { users: 0, newUsers: 0, sessions: 0, views: 0 }) });
+    }
+    sites.push({ property: id, name: label, host, hosts: hostList.slice(0, 3), users7: uniq.error ? null : uniqBy('d7'), users30: uniq.error ? null : uniqBy('d30'), daily: days });
   }
   return { sites };
 }
