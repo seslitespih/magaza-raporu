@@ -253,7 +253,7 @@ async function gaWeb() {
       dimensions: [{ name: 'hostName' }],
       metrics: [{ name: 'sessions' }],
       orderBys: [{ metric: { metricName: 'sessions' }, desc: true }],
-      limit: 5,
+      limit: 10,
     });
     // Tekil kişi: günlükleri toplamak aynı kişiyi birden çok sayar, GA'ya ayrı sor.
     const uniq = await report(id, {
@@ -261,8 +261,17 @@ async function gaWeb() {
       metrics: [{ name: 'activeUsers' }],
     });
     const uniqBy = (n) => parseInt((uniq.rows || []).find((r) => r.dimensionValues?.[0]?.value === n)?.metricValues[0].value) || 0;
-    const hostList = (hosts.rows || []).map((r) => ({ host: r.dimensionValues[0].value.replace(/^www\./, ''), sessions: parseInt(r.metricValues[0].value) || 0 }))
-      .filter((h) => h.host && h.host !== '(not set)' && h.host !== 'localhost' && !/^\d+\.\d+\.\d+\.\d+$/.test(h.host));
+    // www'lu/www'suz aynı alan adı tek satır; barındırma adresleri (vercel.app,
+    // pages.dev…) gerçek alan adından sonra gelir ki site adı o olsun.
+    const merged = {};
+    for (const r of hosts.rows || []) {
+      const h = r.dimensionValues[0].value.replace(/^www\./, '');
+      if (!h || h === '(not set)' || h === 'localhost' || /^\d+\.\d+\.\d+\.\d+$/.test(h)) continue;
+      merged[h] = (merged[h] || 0) + (parseInt(r.metricValues[0].value) || 0);
+    }
+    const isPlatform = (h) => /\.(vercel\.app|pages\.dev|web\.app|firebaseapp\.com|netlify\.app|github\.io)$/.test(h);
+    const hostList = Object.entries(merged).map(([host, sessions]) => ({ host, sessions }))
+      .sort((a, b) => isPlatform(a.host) - isPlatform(b.host) || b.sessions - a.sessions);
     const host = hostList[0]?.host || null;
     // GA ziyaretsiz günleri hiç döndürmüyor — 30 günü 0'larla tamamla.
     const byDate = {};
