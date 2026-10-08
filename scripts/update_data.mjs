@@ -36,6 +36,9 @@ const APPS = {
   'Peacefy - Happy Mind': 'mz',
   'Match Reminder Sports TV Guide': 'mr',
 };
+// Title mağaza adıyla değişir (Peacefy "Happy Mind" -> "Mood & Habit Tracker" olunca iOS'u 0
+// sayıldı). Asıl eşleşme değişmeyen Apple Identifier ile; Title yalnız yedek.
+const APPLE_ID = { '6768603349': 'vocal', '6764509095': 'snout', '6766219901': 'mz', '6779112504': 'mr' };
 const PKGS = { 'com.sesliTesbih.app': 'vocal', 'com.snoutgram.app': 'snout', 'com.mutluzihin.app': 'mz', 'com.machatirlatici.app': 'mr' };
 
 // ---- 13 Temmuz 2026 baz değerleri (Hindistan hariç: tamamı testçi) ----
@@ -108,12 +111,12 @@ async function appleSales() {
     let tsv; try { tsv = zlib.gunzipSync(r.buf).toString('utf8'); } catch { failCount++; return false; }
     const lines = tsv.split('\n').filter((l) => l.trim());
     const hdr = lines[0].split('\t');
-    const iT = hdr.indexOf('Title'), iU = hdr.indexOf('Units'), iC = hdr.indexOf('Country Code'),
+    const iA = hdr.indexOf('Apple Identifier'), iT = hdr.indexOf('Title'), iU = hdr.indexOf('Units'), iC = hdr.indexOf('Country Code'),
       iP = hdr.indexOf('Product Type Identifier'), iPr = hdr.indexOf('Developer Proceeds'),
       iCur = hdr.indexOf('Currency of Proceeds');
     for (const line of lines.slice(1)) {
       const c = line.split('\t');
-      const app = APPS[c[iT]];
+      const app = APPLE_ID[String(c[iA]).trim()] || APPS[c[iT]];
       const country = c[iC], units = parseInt(c[iU]) || 0, ptype = c[iP];
       // ptype 1* = ilk indirme, 3* = redownload, 7* = güncelleme
       if (app && ptype.startsWith('1') && country !== 'IN')
