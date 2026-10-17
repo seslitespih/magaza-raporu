@@ -1,0 +1,10 @@
+# Gizli bilgiler asla commit'lenmesin (repo herkese açık)
+.env
+.env.*
+*.p8
+*.pem
+*.key
+*service-account*.json
+*-sa.json
+rapor-updater/
+node_modules/
